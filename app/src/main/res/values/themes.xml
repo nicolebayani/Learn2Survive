@@ -1,0 +1,83 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Learn2Survive" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorPrimaryContainer">@color/primary_light</item>
+        
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorSecondaryContainer">@color/secondary_light</item>
+        
+        <!-- Accent color. -->
+        <item name="colorAccent">@color/accent</item>
+        
+        <!-- Background colors. -->
+        <item name="android:colorBackground">@color/background</item>
+        <item name="colorSurface">@color/surface</item>
+        
+        <!-- Text colors. -->
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="android:textColorHint">@color/text_hint</item>
+        
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/primary</item>
+        
+        <!-- Window background. -->
+        <item name="android:windowBackground">@color/background</item>
+        
+        <!-- Enable edge-to-edge display. -->
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">shortEdges</item>
+    </style>
+
+    <style name="Theme.Learn2Survive" parent="Base.Theme.Learn2Survive" />
+    
+    <!-- Glassmorphism Card Style -->
+    <style name="GlassCard">
+        <item name="cardBackgroundColor">@color/glass_light</item>
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="strokeColor">@color/glass_border_light</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+    
+    <!-- Glassmorphism Button Style -->
+    <style name="GlassButton" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/glass_light</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="strokeColor">@color/glass_border_light</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+    
+    <!-- Primary Button Style -->
+    <style name="PrimaryButton" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/primary</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    
+    <!-- Secondary Button Style -->
+    <style name="SecondaryButton" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="strokeColor">@color/secondary</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:textColor">@color/secondary</item>
+    </style>
+    
+    <!-- Accent Button Style -->
+    <style name="AccentButton" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/accent</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    
+    <!-- Text Input Style -->
+    <style name="TextInputStyle" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/primary</item>
+        <item name="boxCornerRadiusTopStart">12dp</item>
+        <item name="boxCornerRadiusTopEnd">12dp</item>
+        <item name="boxCornerRadiusBottomStart">12dp</item>
+        <item name="boxCornerRadiusBottomEnd">12dp</item>
+    </style>
+</resources>

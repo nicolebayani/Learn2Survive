@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_home_drawer"
+        android:icon="@android:drawable/ic_menu_compass"
+        android:title="@string/home" />
+    <item
+        android:id="@+id/nav_profile_drawer"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="@string/profile" />
+    <item
+        android:id="@+id/nav_settings_drawer"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:title="@string/settings" />
+    
+    <item android:title="">
+        <menu>
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@android:drawable/ic_menu_close_clear_cancel"
+                android:title="@string/logout" />
+        </menu>
+    </item>
+</menu>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <!-- Start State -->
+    <ConstraintSet android:id="@+id/start">
+        <Constraint
+            android:id="@+id/logoCard">
+            <Layout
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginBottom="32dp"
+                motion:layout_constraintBottom_toTopOf="@+id/appNameText"
+                motion:layout_constraintEnd_toEndOf="parent"
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent"
+                motion:layout_constraintVertical_chainStyle="packed" />
+            <Transform
+                android:scaleX="0.5"
+                android:scaleY="0.5"
+                android:rotation="-180" />
+            <PropertySet android:alpha="0" />
+        </Constraint>
+
+        <Constraint
+            android:id="@+id/appNameText">
+            <Layout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                motion:layout_constraintBottom_toBottomOf="parent"
+                motion:layout_constraintEnd_toEndOf="parent"
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toBottomOf="@+id/logoCard" />
+            <PropertySet android:alpha="0" />
+        </Constraint>
+
+        <Constraint
+            android:id="@+id/loadingIndicator">
+            <Layout
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="24dp"
+                motion:layout_constraintEnd_toEndOf="parent"
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toBottomOf="@+id/appNameText" />
+            <PropertySet android:alpha="0" />
+        </Constraint>
+    </ConstraintSet>
+
+    <!-- End State -->
+    <ConstraintSet android:id="@+id/end">
+        <Constraint
+            android:id="@+id/logoCard">
+            <Layout
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginBottom="32dp"
+                motion:layout_constraintBottom_toTopOf="@+id/appNameText"
+                motion:layout_constraintEnd_toEndOf="parent"
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent"
+                motion:layout_constraintVertical_chainStyle="packed" />
+            <Transform
+                android:scaleX="1"
+                android:scaleY="1"
+                android:rotation="0" />
+            <PropertySet android:alpha="1" />
+        </Constraint>
+
+        <Constraint
+            android:id="@+id/appNameText">
+            <Layout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                motion:layout_constraintBottom_toBottomOf="parent"
+                motion:layout_constraintEnd_toEndOf="parent"
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toBottomOf="@+id/logoCard" />
+            <PropertySet android:alpha="1" />
+        </Constraint>
+
+        <Constraint
+            android:id="@+id/loadingIndicator">
+            <Layout
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="24dp"
+                motion:layout_constraintEnd_toEndOf="parent"
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toBottomOf="@+id/appNameText" />
+            <PropertySet android:alpha="1" />
+        </Constraint>
+    </ConstraintSet>
+
+    <!-- Transition -->
+    <Transition
+        motion:constraintSetEnd="@id/end"
+        motion:constraintSetStart="@id/start"
+        motion:duration="1000"
+        motion:motionInterpolator="easeInOut">
+        <KeyFrameSet>
+            <KeyAttribute
+                android:alpha="0.5"
+                motion:framePosition="50"
+                motion:motionTarget="@+id/logoCard" />
+            <KeyAttribute
+                android:alpha="0.5"
+                motion:framePosition="50"
+                motion:motionTarget="@+id/appNameText" />
+        </KeyFrameSet>
+    </Transition>
+
+</MotionScene>

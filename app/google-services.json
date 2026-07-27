@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "195247386035",
+    "project_id": "learn2survive-16c09",
+    "storage_bucket": "learn2survive-16c09.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:195247386035:android:283e7a24190736235b6fc6",
+        "android_client_info": {
+          "package_name": "android.bignerdranch.learn2survive"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEHLRykfk8o5Iy3HBuL0I5zZ99hMNYKjw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
