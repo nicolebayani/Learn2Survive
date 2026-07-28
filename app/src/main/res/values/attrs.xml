@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="XPProgressBar">
+        <attr name="backgroundColor" format="color" />
+        <attr name="progressColor" format="color" />
+        <attr name="textColor" format="color" />
+        <attr name="cornerRadius" format="dimension" />
+        <attr name="strokeWidth" format="dimension" />
+        <attr name="showText" format="boolean" />
+        <attr name="maxProgress" format="integer" />
+    </declare-styleable>
+    
+    <declare-styleable name="StatCard">
+        <attr name="title" format="string" />
+        <attr name="value" format="string" />
+        <attr name="icon" format="reference" />
+        <attr name="cardColor" format="color" />
+    </declare-styleable>
+    
+    <declare-styleable name="AchievementCard">
+        <attr name="title" format="string" />
+        <attr name="description" format="string" />
+        <attr name="date" format="string" />
+        <attr name="icon" format="reference" />
+        <attr name="unlocked" format="boolean" />
+        <attr name="cardColor" format="color" />
+    </declare-styleable>
+</resources>
