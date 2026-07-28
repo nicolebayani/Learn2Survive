@@ -357,10 +357,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                app:title="Lessons"
+                app:cardTitle="Lessons"
                 app:value="0"
-                app:icon="@android:drawable/ic_menu_agenda"
-                app:cardColor="@color/surface" />
+                app:cardIcon="@android:drawable/ic_menu_agenda"
+                app:cardBackgroundColor="@color/surface" />
 
             <android.bignerdranch.learn2survive.ui.custom.StatCard
                 android:id="@+id/quizzesCompletedCard"
@@ -369,10 +369,10 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
                 android:layout_weight="1"
-                app:title="Quizzes"
+                app:cardTitle="Quizzes"
                 app:value="0"
-                app:icon="@android:drawable/ic_menu_edit"
-                app:cardColor="@color/surface" />
+                app:cardIcon="@android:drawable/ic_menu_edit"
+                app:cardBackgroundColor="@color/surface" />
 
             <android.bignerdranch.learn2survive.ui.custom.StatCard
                 android:id="@+id/achievementsCard"
@@ -380,10 +380,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_weight="1"
-                app:title="Badges"
+                app:cardTitle="Badges"
                 app:value="0"
-                app:icon="@android:drawable/ic_menu_star"
-                app:cardColor="@color/surface" />
+                app:cardIcon="@android:drawable/ic_menu_info_details"
+                app:cardBackgroundColor="@color/surface" />
 
         </LinearLayout>
 

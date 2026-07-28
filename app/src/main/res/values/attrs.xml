@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Global attributes -->
+    <attr name="cardTitle" format="string" />
+    <attr name="cardIcon" format="reference" />
+    <attr name="cardBackgroundColor" format="color" />
+    
     <declare-styleable name="XPProgressBar">
         <attr name="backgroundColor" format="color" />
         <attr name="progressColor" format="color" />
@@ -11,18 +16,18 @@
     </declare-styleable>
     
     <declare-styleable name="StatCard">
-        <attr name="title" format="string" />
+        <attr name="cardTitle" />
         <attr name="value" format="string" />
-        <attr name="icon" format="reference" />
-        <attr name="cardColor" format="color" />
+        <attr name="cardIcon" />
+        <attr name="cardBackgroundColor" />
     </declare-styleable>
     
     <declare-styleable name="AchievementCard">
-        <attr name="title" format="string" />
+        <attr name="cardTitle" />
         <attr name="description" format="string" />
         <attr name="date" format="string" />
-        <attr name="icon" format="reference" />
+        <attr name="cardIcon" />
         <attr name="unlocked" format="boolean" />
-        <attr name="cardColor" format="color" />
+        <attr name="cardBackgroundColor" />
     </declare-styleable>
 </resources>

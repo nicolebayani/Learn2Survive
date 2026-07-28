@@ -57,12 +57,12 @@ public class AchievementCard extends CardView {
             );
             
             try {
-                String title = a.getString(R.styleable.AchievementCard_title);
+                String title = a.getString(R.styleable.AchievementCard_cardTitle);
                 String description = a.getString(R.styleable.AchievementCard_description);
                 String date = a.getString(R.styleable.AchievementCard_date);
-                int iconRes = a.getResourceId(R.styleable.AchievementCard_icon, 0);
+                int iconRes = a.getResourceId(R.styleable.AchievementCard_cardIcon, 0);
                 boolean unlocked = a.getBoolean(R.styleable.AchievementCard_unlocked, true);
-                int cardColor = a.getColor(R.styleable.AchievementCard_cardColor,
+                int cardColor = a.getColor(R.styleable.AchievementCard_cardBackgroundColor,
                         ContextCompat.getColor(context, R.color.surface));
                 
                 if (title != null) setTitle(title);

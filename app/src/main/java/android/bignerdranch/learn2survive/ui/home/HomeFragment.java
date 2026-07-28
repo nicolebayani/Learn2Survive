@@ -221,9 +221,10 @@ public class HomeFragment extends Fragment {
                 cards[i].setAlpha(0f);
                 cards[i].setTranslationY(50f);
                 
-                cards[i].postDelayed(() -> {
-                    ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(cards[i], "alpha", 0f, 1f);
-                    ObjectAnimator translationAnimator = ObjectAnimator.ofFloat(cards[i], "translationY", 50f, 0f);
+                final View card = cards[i];
+                card.postDelayed(() -> {
+                    ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(card, "alpha", 0f, 1f);
+                    ObjectAnimator translationAnimator = ObjectAnimator.ofFloat(card, "translationY", 50f, 0f);
                     
                     alphaAnimator.setDuration(500);
                     translationAnimator.setDuration(500);

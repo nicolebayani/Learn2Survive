@@ -1,6 +1,7 @@
 package android.bignerdranch.learn2survive.ui.custom;
 
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.GradientDrawable;
@@ -56,10 +57,10 @@ public class StatCard extends CardView {
             );
             
             try {
-                String title = a.getString(R.styleable.StatCard_title);
+                String title = a.getString(R.styleable.StatCard_cardTitle);
                 String value = a.getString(R.styleable.StatCard_value);
-                int iconRes = a.getResourceId(R.styleable.StatCard_icon, 0);
-                int cardColor = a.getColor(R.styleable.StatCard_cardColor,
+                int iconRes = a.getResourceId(R.styleable.StatCard_cardIcon, 0);
+                int cardColor = a.getColor(R.styleable.StatCard_cardBackgroundColor,
                         ContextCompat.getColor(context, R.color.surface));
                 
                 if (title != null) setTitle(title);

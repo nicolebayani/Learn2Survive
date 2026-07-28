@@ -11,6 +11,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -109,6 +110,18 @@ public class AuthRepositoryImpl implements AuthRepository {
         userMap.put("fullName", fullName);
         userMap.put("profileImageUrl", "");
         userMap.put("createdAt", System.currentTimeMillis());
+        
+        // Add game-related fields with default values
+        userMap.put("level", 1);
+        userMap.put("currentXP", 0);
+        userMap.put("maxXP", 100);
+        userMap.put("coins", 0);
+        userMap.put("dailyStreak", 0);
+        userMap.put("lastActiveDate", System.currentTimeMillis());
+        userMap.put("achievements", new ArrayList<>());
+        userMap.put("statistics", new HashMap<>());
+        userMap.put("completedLessons", 0);
+        userMap.put("completedQuizzes", 0);
 
         firestore.collection(USERS_COLLECTION)
                 .document(userId)

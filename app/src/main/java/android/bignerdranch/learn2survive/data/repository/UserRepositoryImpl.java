@@ -71,7 +71,7 @@ public class UserRepositoryImpl implements UserRepository {
             User user = snapshot.toObject(User.class);
             
             if (user == null) {
-                throw new Exception("User not found");
+                throw new RuntimeException("User not found");
             }
             
             int currentXP = user.getCurrentXP() + xpToAdd;
