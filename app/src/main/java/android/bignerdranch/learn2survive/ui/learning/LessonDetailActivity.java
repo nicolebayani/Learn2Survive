@@ -1,8 +1,10 @@
 package android.bignerdranch.learn2survive.ui.learning;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -33,6 +35,7 @@ public class LessonDetailActivity extends AppCompatActivity {
     private ImageView bookmarkButton;
     private LottieAnimationView mainAnimation;
     private ProgressBar progressBar;
+    private Button quizButton;
 
     private Lesson lesson;
     private UserProgress userProgress;
@@ -53,6 +56,7 @@ public class LessonDetailActivity extends AppCompatActivity {
         loadLessonData();
         setupViewPager();
         setupBookmark();
+        setupQuizButton();
     }
 
     private void initViews() {
@@ -63,6 +67,7 @@ public class LessonDetailActivity extends AppCompatActivity {
         bookmarkButton = findViewById(R.id.bookmarkButton);
         mainAnimation = findViewById(R.id.mainAnimation);
         progressBar = findViewById(R.id.progressBar);
+        quizButton = findViewById(R.id.quizButton);
     }
 
     private void setupToolbar(String title, String description) {
@@ -135,6 +140,14 @@ public class LessonDetailActivity extends AppCompatActivity {
 
     private void saveBookmarkState(boolean bookmarked) {
         // Save to Firestore
+    }
+
+    private void setupQuizButton() {
+        quizButton.setOnClickListener(v -> {
+            Intent intent = new Intent(this, android.bignerdranch.learn2survive.ui.quiz.QuizActivity.class);
+            intent.putExtra(android.bignerdranch.learn2survive.ui.quiz.QuizActivity.EXTRA_LESSON_ID, lessonId);
+            startActivity(intent);
+        });
     }
 
     @Override

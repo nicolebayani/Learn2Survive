@@ -49,7 +49,14 @@
     <color name="transparent">#00000000</color>
     
     <!-- Additional Colors -->
+    <color name="gray_100">#F5F5F5</color>
     <color name="gray_200">#EEEEEE</color>
+    <color name="gray_300">#BDBDBD</color>
     <color name="stroke_color">#E0E0E0</color>
     <color name="card_background">#FFFFFF</color>
+    
+    <!-- Quiz Colors -->
+    <color name="xp_color">#9C27B0</color>
+    <color name="coin_color">#FFD700</color>
+    <color name="star_color">#FFC107</color>
 </resources>

@@ -89,6 +89,25 @@
             android:exported="false"
             android:theme="@style/Theme.Learn2Survive" />
 
+        <!-- Quiz Activity -->
+        <activity
+            android:name=".ui.quiz.QuizActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Learn2Survive"
+            android:screenOrientation="portrait" />
+
+        <!-- Quiz Results Activity -->
+        <activity
+            android:name=".ui.quiz.QuizResultsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Learn2Survive" />
+
+        <!-- Quiz Review Activity -->
+        <activity
+            android:name=".ui.quiz.QuizReviewActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Learn2Survive" />
+
     </application>
 
 </manifest>
