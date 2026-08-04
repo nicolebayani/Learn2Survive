@@ -34,7 +34,7 @@ public class AuthRepositoryImpl implements AuthRepository {
                     if (task.isSuccessful()) {
                         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
                         if (firebaseUser != null) {
-                            getUserFromFirestore(firebaseUser.getUid(), callback);
+                            getUserFromFirestore(firebaseUser.getUid(), email, firebaseUser.getDisplayName(), callback);
                         } else {
                             callback.onFailure("User not found");
                         }
@@ -92,7 +92,7 @@ public class AuthRepositoryImpl implements AuthRepository {
     public void getCurrentUser(final AuthCallback callback) {
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         if (firebaseUser != null) {
-            getUserFromFirestore(firebaseUser.getUid(), callback);
+            getUserFromFirestore(firebaseUser.getUid(), firebaseUser.getEmail(), firebaseUser.getDisplayName(), callback);
         } else {
             callback.onFailure("No user logged in");
         }
@@ -101,6 +101,34 @@ public class AuthRepositoryImpl implements AuthRepository {
     @Override
     public boolean isLoggedIn() {
         return firebaseAuth.getCurrentUser() != null;
+    }
+
+    @Override
+    public void deleteAccount(final AuthCallback callback) {
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        if (firebaseUser == null) {
+            callback.onFailure("No user logged in");
+            return;
+        }
+
+        // First delete from Firestore
+        firestore.collection(USERS_COLLECTION).document(firebaseUser.getUid())
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    // Then delete from Firebase Auth
+                    firebaseUser.delete()
+                            .addOnSuccessListener(aVoid2 -> {
+                                callback.onSuccess(null);
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.e(TAG, "Error deleting user from Auth", e);
+                                callback.onFailure("Failed to delete account: " + e.getMessage());
+                            });
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error deleting user from Firestore", e);
+                    callback.onFailure("Failed to delete user data: " + e.getMessage());
+                });
     }
 
     private void saveUserToFirestore(String userId, String email, String fullName, final AuthCallback callback) {
@@ -136,7 +164,7 @@ public class AuthRepositoryImpl implements AuthRepository {
                 });
     }
 
-    private void getUserFromFirestore(String userId, final AuthCallback callback) {
+    private void getUserFromFirestore(String userId, String email, String displayName, final AuthCallback callback) {
         DocumentReference docRef = firestore.collection(USERS_COLLECTION).document(userId);
         docRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -145,7 +173,10 @@ public class AuthRepositoryImpl implements AuthRepository {
                     User user = document.toObject(User.class);
                     callback.onSuccess(user);
                 } else {
-                    callback.onFailure("User data not found");
+                    // User exists in Firebase Auth but not in Firestore, create Firestore document
+                    Log.d(TAG, "User not found in Firestore, creating document");
+                    String fullName = displayName != null ? displayName : email.split("@")[0];
+                    saveUserToFirestore(userId, email, fullName, callback);
                 }
             } else {
                 String errorMessage = task.getException() != null 

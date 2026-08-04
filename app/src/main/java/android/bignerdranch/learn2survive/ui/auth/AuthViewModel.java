@@ -46,7 +46,18 @@ public class AuthViewModel extends ViewModel {
             @Override
             public void onFailure(String errorMessage) {
                 loadingLiveData.setValue(false);
-                errorLiveData.setValue(errorMessage);
+                // Provide user-friendly error messages
+                String userFriendlyMessage = errorMessage;
+                if (errorMessage != null) {
+                    if (errorMessage.contains("invalid credential") || errorMessage.contains("wrong password")) {
+                        userFriendlyMessage = "Invalid email or password.";
+                    } else if (errorMessage.contains("user not found")) {
+                        userFriendlyMessage = "User not found. Please register first.";
+                    } else if (errorMessage.contains("network")) {
+                        userFriendlyMessage = "Network error. Please check your internet connection.";
+                    }
+                }
+                errorLiveData.setValue(userFriendlyMessage);
             }
         });
     }
@@ -64,7 +75,20 @@ public class AuthViewModel extends ViewModel {
             @Override
             public void onFailure(String errorMessage) {
                 loadingLiveData.setValue(false);
-                errorLiveData.setValue(errorMessage);
+                // Provide user-friendly error messages
+                String userFriendlyMessage = errorMessage;
+                if (errorMessage != null) {
+                    if (errorMessage.contains("email already in use") || errorMessage.contains("already exists")) {
+                        userFriendlyMessage = "This email is already registered. Please login instead.";
+                    } else if (errorMessage.contains("weak password")) {
+                        userFriendlyMessage = "Password is too weak. Please use a stronger password.";
+                    } else if (errorMessage.contains("invalid email")) {
+                        userFriendlyMessage = "Invalid email address format.";
+                    } else if (errorMessage.contains("network")) {
+                        userFriendlyMessage = "Network error. Please check your internet connection.";
+                    }
+                }
+                errorLiveData.setValue(userFriendlyMessage);
             }
         });
     }
@@ -93,6 +117,24 @@ public class AuthViewModel extends ViewModel {
             public void onSuccess(User user) {
                 loadingLiveData.setValue(false);
                 userLiveData.setValue(null);
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                loadingLiveData.setValue(false);
+                errorLiveData.setValue(errorMessage);
+            }
+        });
+    }
+
+    public void deleteAccount() {
+        loadingLiveData.setValue(true);
+        authRepository.deleteAccount(new AuthRepository.AuthCallback() {
+            @Override
+            public void onSuccess(User user) {
+                loadingLiveData.setValue(false);
+                userLiveData.setValue(null);
+                successMessageLiveData.setValue("Account deleted successfully");
             }
 
             @Override

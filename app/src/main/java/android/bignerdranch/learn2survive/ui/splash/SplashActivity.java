@@ -43,20 +43,32 @@ public class SplashActivity extends AppCompatActivity {
     private void checkUserStatusAndNavigate() {
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         boolean onboardingCompleted = prefs.getBoolean(KEY_ONBOARDING_COMPLETED, false);
-        boolean isLoggedIn = DependencyProvider.provideAuthRepository().isLoggedIn();
+        
+        // Check if user is logged in AND has data in Firestore
+        DependencyProvider.provideAuthRepository().getCurrentUser(new android.bignerdranch.learn2survive.domain.repository.AuthRepository.AuthCallback() {
+            @Override
+            public void onSuccess(android.bignerdranch.learn2survive.domain.model.User user) {
+                // User exists in both Firebase Auth and Firestore
+                Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
+                startActivity(intent);
+                finish();
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            }
 
-        Intent intent;
-        if (isLoggedIn) {
-            intent = new Intent(this, HomeActivity.class);
-        } else if (onboardingCompleted) {
-            intent = new Intent(this, LoginActivity.class);
-        } else {
-            intent = new Intent(this, OnboardingActivity.class);
-        }
-
-        startActivity(intent);
-        finish();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            @Override
+            public void onFailure(String errorMessage) {
+                // User not logged in or no data in Firestore
+                Intent intent;
+                if (onboardingCompleted) {
+                    intent = new Intent(SplashActivity.this, LoginActivity.class);
+                } else {
+                    intent = new Intent(SplashActivity.this, OnboardingActivity.class);
+                }
+                startActivity(intent);
+                finish();
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            }
+        });
     }
 
     @Override

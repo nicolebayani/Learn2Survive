@@ -77,6 +77,18 @@
             android:exported="false"
             android:theme="@style/Theme.Learn2Survive" />
 
+        <!-- Learning Activity -->
+        <activity
+            android:name=".ui.learning.LearningActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Learn2Survive" />
+
+        <!-- Lesson Detail Activity -->
+        <activity
+            android:name=".ui.learning.LessonDetailActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Learn2Survive" />
+
     </application>
 
 </manifest>

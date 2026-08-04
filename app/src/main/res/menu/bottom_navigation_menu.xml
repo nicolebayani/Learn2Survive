@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_lessons"
+        android:icon="@drawable/ic_book_outline"
+        android:title="Lessons" />
+    <item
+        android:id="@+id/navigation_progress"
+        android:icon="@drawable/ic_progress_outline"
+        android:title="Progress" />
+</menu>

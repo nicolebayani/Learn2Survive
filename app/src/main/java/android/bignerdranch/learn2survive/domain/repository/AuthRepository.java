@@ -8,6 +8,7 @@ public interface AuthRepository {
     void forgotPassword(String email, AuthCallback callback);
     void logout(AuthCallback callback);
     void getCurrentUser(AuthCallback callback);
+    void deleteAccount(AuthCallback callback);
     boolean isLoggedIn();
     
     interface AuthCallback {
