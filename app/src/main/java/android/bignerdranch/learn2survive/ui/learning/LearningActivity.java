@@ -1,5 +1,6 @@
 package android.bignerdranch.learn2survive.ui.learning;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.bignerdranch.learn2survive.R;
 import android.bignerdranch.learn2survive.ui.learning.fragments.LessonsListFragment;
 import android.bignerdranch.learn2survive.ui.learning.fragments.BookmarkedLessonsFragment;
+import android.bignerdranch.learn2survive.ui.simulation.SimulationsListActivity;
 
 public class LearningActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
@@ -51,6 +53,10 @@ public class LearningActivity extends AppCompatActivity {
                 
                 if (itemId == R.id.navigation_lessons) {
                     fragment = new LessonsListFragment();
+                } else if (itemId == R.id.navigation_simulations) {
+                    Intent intent = new Intent(LearningActivity.this, SimulationsListActivity.class);
+                    startActivity(intent);
+                    return true;
                 } else if (itemId == R.id.navigation_progress) {
                     fragment = new ProgressFragment();
                 }

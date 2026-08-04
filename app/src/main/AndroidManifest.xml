@@ -108,6 +108,25 @@
             android:exported="false"
             android:theme="@style/Theme.Learn2Survive" />
 
+        <!-- Simulation Activity -->
+        <activity
+            android:name=".ui.simulation.SimulationActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Learn2Survive"
+            android:screenOrientation="portrait" />
+
+        <!-- Simulation Results Activity -->
+        <activity
+            android:name=".ui.simulation.SimulationResultsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Learn2Survive" />
+
+        <!-- Simulations List Activity -->
+        <activity
+            android:name=".ui.simulation.SimulationsListActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Learn2Survive" />
+
     </application>
 
 </manifest>

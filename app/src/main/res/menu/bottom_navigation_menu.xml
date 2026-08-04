@@ -5,6 +5,10 @@
         android:icon="@drawable/ic_book_outline"
         android:title="Lessons" />
     <item
+        android:id="@+id/navigation_simulations"
+        android:icon="@drawable/ic_disaster"
+        android:title="Simulations" />
+    <item
         android:id="@+id/navigation_progress"
         android:icon="@drawable/ic_progress_outline"
         android:title="Progress" />
