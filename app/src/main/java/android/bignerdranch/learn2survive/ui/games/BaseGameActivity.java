@@ -21,6 +21,10 @@ import android.bignerdranch.learn2survive.domain.model.GameScore;
 import android.bignerdranch.learn2survive.domain.model.GameType;
 import android.bignerdranch.learn2survive.domain.repository.GameRepository;
 import android.bignerdranch.learn2survive.data.remote.GameRepositoryImpl;
+import android.bignerdranch.learn2survive.domain.manager.GamificationManager;
+import android.bignerdranch.learn2survive.domain.repository.GamificationRepository;
+import android.bignerdranch.learn2survive.data.remote.GamificationRepositoryImpl;
+import android.bignerdranch.learn2survive.ui.gamification.GamificationHelper;
 
 public abstract class BaseGameActivity extends AppCompatActivity {
     // UI Components
@@ -56,6 +60,11 @@ public abstract class BaseGameActivity extends AppCompatActivity {
     // Firebase
     protected GameRepository gameRepository;
     protected String currentUserId;
+    
+    // Gamification
+    protected GamificationManager gamificationManager;
+    protected GamificationRepository gamificationRepository;
+    protected GamificationHelper gamificationHelper;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,9 +118,36 @@ public abstract class BaseGameActivity extends AppCompatActivity {
         gameRepository = new GameRepositoryImpl();
         currentUserId = getCurrentUserId();
         
+        // Initialize gamification
+        gamificationManager = GamificationManager.getInstance();
+        gamificationRepository = new GamificationRepositoryImpl();
+        gamificationHelper = GamificationHelper.getInstance();
+        
+        // Load player data
+        loadPlayerGamificationData();
+        
         setupGameContent();
         startTimer();
         updateUI();
+    }
+    
+    protected void loadPlayerGamificationData() {
+        gamificationRepository.loadPlayerData(currentUserId, new GamificationRepository.GamificationDataCallback() {
+            @Override
+            public void onSuccess(android.bignerdranch.learn2survive.domain.model.PlayerGamificationData playerData) {
+                gamificationManager.setPlayerData(playerData);
+                gamificationManager.updateStreak();
+            }
+            
+            @Override
+            public void onFailure(Exception e) {
+                // Create new player data on failure
+                android.bignerdranch.learn2survive.domain.model.PlayerGamificationData newPlayerData = 
+                    new android.bignerdranch.learn2survive.domain.model.PlayerGamificationData();
+                newPlayerData.setUserId(currentUserId);
+                gamificationManager.setPlayerData(newPlayerData);
+            }
+        });
     }
     
     protected String getCurrentUserId() {
@@ -175,12 +211,14 @@ public abstract class BaseGameActivity extends AppCompatActivity {
     
     protected void addCoins(int amount) {
         coins += amount;
+        gamificationManager.addCoins(amount);
         playSoundEffect("coin.mp3");
         updateUI();
     }
     
     protected void addXP(int amount) {
         xp += amount;
+        gamificationManager.addXP(amount);
         updateUI();
     }
     
@@ -256,8 +294,70 @@ public abstract class BaseGameActivity extends AppCompatActivity {
         // Save score to Firebase
         saveGameScore(result);
         
+        // Update gamification
+        updateGamification(result);
+        
+        // Sync to Firebase
+        syncGamificationData();
+        
         onGameComplete();
         showResultsDialog(result, timeUp);
+    }
+    
+    protected void updateGamification(GameResult result) {
+        // Track old level to detect level ups
+        int oldLevel = gamificationManager.getPlayerData() != null ? 
+            gamificationManager.getPlayerData().getCurrentLevel() : 1;
+        
+        // Update game achievements
+        gamificationManager.updateAchievementProgress("first_game", 1);
+        gamificationManager.updateAchievementProgress("game_master_10", 1);
+        gamificationManager.updateAchievementProgress("game_master_25", 1);
+        
+        // Update score achievements
+        if (result.getScore() >= 500) {
+            gamificationManager.updateAchievementProgress("high_score_game", 1);
+        }
+        
+        // Update perfect game achievement
+        if (result.getStars() >= 3) {
+            gamificationManager.updateAchievementProgress("perfect_game", 1);
+        }
+        
+        // Update challenge progress
+        gamificationManager.updateChallengeProgress("daily_game_1", 1);
+        gamificationManager.updateChallengeProgress("weekly_games_7", 1);
+        
+        // Check for level up
+        int newLevel = gamificationManager.getPlayerData() != null ? 
+            gamificationManager.getPlayerData().getCurrentLevel() : oldLevel;
+        
+        if (newLevel > oldLevel) {
+            gamificationHelper.showLevelUp(this, newLevel);
+            gamificationHelper.triggerConfetti(this);
+        }
+        
+        // Show newly completed achievements
+        gamificationHelper.checkAndShowAchievements(this);
+    }
+    
+    protected void syncGamificationData() {
+        android.bignerdranch.learn2survive.domain.model.PlayerGamificationData playerData = 
+            gamificationManager.getPlayerData();
+        
+        if (playerData != null) {
+            gamificationRepository.syncPlayerData(playerData, new GamificationRepository.GamificationCallback() {
+                @Override
+                public void onSuccess() {
+                    // Sync successful
+                }
+                
+                @Override
+                public void onFailure(Exception e) {
+                    // Handle sync failure
+                }
+            });
+        }
     }
     
     protected void saveGameScore(GameResult result) {

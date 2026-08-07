@@ -182,6 +182,12 @@
             android:theme="@style/Theme.Learn2Survive"
             android:screenOrientation="portrait" />
 
+        <!-- Reward Screen Activity -->
+        <activity
+            android:name=".ui.gamification.RewardScreenActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Learn2Survive" />
+
     </application>
 
 </manifest>
