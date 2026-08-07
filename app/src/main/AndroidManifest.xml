@@ -127,6 +127,61 @@
             android:exported="false"
             android:theme="@style/Theme.Learn2Survive" />
 
+        <!-- Games List Activity -->
+        <activity
+            android:name=".ui.games.GamesListActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Learn2Survive" />
+
+        <!-- Emergency Kit Builder Activity -->
+        <activity
+            android:name=".ui.games.EmergencyKitBuilderActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Learn2Survive"
+            android:screenOrientation="portrait" />
+
+        <!-- Evacuation Maze Activity -->
+        <activity
+            android:name=".ui.games.EvacuationMazeActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Learn2Survive"
+            android:screenOrientation="portrait" />
+
+        <!-- Fire Escape Activity -->
+        <activity
+            android:name=".ui.games.FireEscapeActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Learn2Survive"
+            android:screenOrientation="portrait" />
+
+        <!-- Flood Rescue Activity -->
+        <activity
+            android:name=".ui.games.FloodRescueActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Learn2Survive"
+            android:screenOrientation="portrait" />
+
+        <!-- Typhoon House Defender Activity -->
+        <activity
+            android:name=".ui.games.TyphoonHouseDefenderActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Learn2Survive"
+            android:screenOrientation="portrait" />
+
+        <!-- Earthquake Safe Spot Activity -->
+        <activity
+            android:name=".ui.games.EarthquakeSafeSpotActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Learn2Survive"
+            android:screenOrientation="portrait" />
+
+        <!-- Memory Match Activity -->
+        <activity
+            android:name=".ui.games.MemoryMatchActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Learn2Survive"
+            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>

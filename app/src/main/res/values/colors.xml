@@ -59,4 +59,13 @@
     <color name="xp_color">#9C27B0</color>
     <color name="coin_color">#FFD700</color>
     <color name="star_color">#FFC107</color>
+    
+    <!-- Game Colors -->
+    <color name="game_background">#1A1A2E</color>
+    <color name="game_top_bar">#16213E</color>
+    <color name="game_stats_bar">#0F3460</color>
+    <color name="game_bottom_bar">#16213E</color>
+    <color name="progress_color">#E94560</color>
+    <color name="hint_button_color">#533483</color>
+    <color name="action_button_color">#E94560</color>
 </resources>
