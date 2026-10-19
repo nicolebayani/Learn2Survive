@@ -168,8 +168,8 @@ public class EarthquakeSafeSpotActivity extends BaseGameActivity {
         GridLayout.LayoutParams params = new GridLayout.LayoutParams();
         params.width = 0;
         params.height = GridLayout.LayoutParams.WRAP_CONTENT;
-        params.columnSpec = GridLayout.spec(GridLayout.UNSPECIFIED, 1f);
-        params.rowSpec = GridLayout.spec(GridLayout.UNSPECIFIED, 1f);
+        params.columnSpec = GridLayout.spec(0, 1f);
+        params.rowSpec = GridLayout.spec(0, 1f);
         params.setMargins(4, 4, 4, 4);
         spotView.setLayoutParams(params);
         
@@ -225,7 +225,7 @@ public class EarthquakeSafeSpotActivity extends BaseGameActivity {
         }
     }
     
-    private void updateUI() {
+    protected void updateUI() {
         spotsFoundTextView.setText("Safe Spots: " + foundSafeSpots + "/" + totalSafeSpots);
         
         // Update progress bar

@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+        android:name=".Learn2SurviveApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -15,22 +16,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Learn2Survive">
         
-        <!-- Main Activity (Launcher) -->
+        <!-- Splash Activity (Launcher) -->
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.splash.SplashActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize">
+            android:theme="@style/Theme.Learn2Survive">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <!-- Splash Activity -->
+        <!-- Main Activity -->
         <activity
-            android:name=".ui.splash.SplashActivity"
+            android:name=".MainActivity"
             android:exported="false"
-            android:theme="@style/Theme.Learn2Survive" />
+            android:windowSoftInputMode="adjustResize" />
 
         <!-- Onboarding Activity -->
         <activity
@@ -126,6 +127,13 @@
             android:name=".ui.simulation.SimulationsListActivity"
             android:exported="false"
             android:theme="@style/Theme.Learn2Survive" />
+
+        <!-- Immersive Scenario Activity -->
+        <activity
+            android:name=".ui.simulation.ImmersiveScenarioActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Learn2Survive"
+            android:screenOrientation="portrait" />
 
         <!-- Games List Activity -->
         <activity

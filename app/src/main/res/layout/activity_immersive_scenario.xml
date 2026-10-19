@@ -1,0 +1,490 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/primary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleTextColor="@color/white" />
+
+    <!-- Warning Screen -->
+    <LinearLayout
+        android:id="@+id/warningScreen"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="24dp"
+        android:background="@color/error"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/warningIconTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="⚠️"
+            android:textSize="80sp"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:id="@+id/warningTitleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DISASTER WARNING"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_marginBottom="16dp" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/warningAnimationView"
+            android:layout_width="300dp"
+            android:layout_height="200dp"
+            android:layout_marginBottom="24dp" />
+
+        <TextView
+            android:id="@+id/warningMessageTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="A strong earthquake has started in your area."
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:layout_marginBottom="32dp" />
+
+        <TextView
+            android:id="@+id/countdownTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Scenario starting in: 5"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_marginBottom="32dp" />
+
+        <Button
+            android:id="@+id/startScenarioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="START SCENARIO"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:background="@drawable/option_background"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <!-- Situation Evaluation Screen -->
+    <LinearLayout
+        android:id="@+id/situationScreen"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/situationTitleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Evaluate the Situation"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:layout_marginBottom="16dp" />
+
+        <ImageView
+            android:id="@+id/situationImageView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:background="@color/gray_200"
+            android:layout_marginBottom="16dp" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="@color/gray_100">
+
+            <TextView
+                android:id="@+id/situationDescriptionTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Situation description"
+                android:textSize="15sp"
+                android:textColor="@color/text_secondary"
+                android:lineSpacingExtra="6dp"
+                android:padding="16dp" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/situationQuestionTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="What should you do first?"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:layout_marginBottom="16dp" />
+
+        <Button
+            android:id="@+id/situationChoice1Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="Choice 1"
+            android:background="@drawable/option_background" />
+
+        <Button
+            android:id="@+id/situationChoice2Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="Choice 2"
+            android:background="@drawable/option_background" />
+
+        <Button
+            android:id="@+id/situationChoice3Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Choice 3"
+            android:background="@drawable/option_background" />
+
+    </LinearLayout>
+
+    <!-- Supplies Selection Screen -->
+    <LinearLayout
+        android:id="@+id/suppliesScreen"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/suppliesTitleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Emergency Supplies"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:layout_marginBottom="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/suppliesLimitTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Select up to 8 items"
+                android:textSize="14sp"
+                android:textColor="@color/text_secondary" />
+
+            <TextView
+                android:id="@+id/suppliesCountTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Selected: 0/8"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/primary" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/suppliesRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="16dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🎒 "
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/backpackStatusTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Backpack Status: Empty"
+                android:textSize="14sp"
+                android:textColor="@color/text_secondary" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/confirmSuppliesButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Confirm Selection"
+            android:background="@drawable/option_background"
+            android:enabled="false" />
+
+    </LinearLayout>
+
+    <!-- Evacuation Actions Screen -->
+    <LinearLayout
+        android:id="@+id/evacuationScreen"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/evacuationTitleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Choose Evacuation Actions"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:id="@+id/evacuationDescriptionTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Evacuation description"
+            android:textSize="16sp"
+            android:textColor="@color/text_secondary"
+            android:layout_marginBottom="24dp" />
+
+        <Button
+            android:id="@+id/evacuationChoice1Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="Choice 1"
+            android:background="@drawable/option_background" />
+
+        <Button
+            android:id="@+id/evacuationChoice2Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="Choice 2"
+            android:background="@drawable/option_background" />
+
+        <Button
+            android:id="@+id/evacuationChoice3Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Choice 3"
+            android:background="@drawable/option_background" />
+
+    </LinearLayout>
+
+    <!-- Changing Conditions Screen -->
+    <LinearLayout
+        android:id="@+id/conditionsScreen"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/conditionsTitleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Conditions are Changing"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/error"
+            android:layout_marginBottom="16dp" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/conditionsAnimationView"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:id="@+id/conditionsDescriptionTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Conditions description"
+            android:textSize="16sp"
+            android:textColor="@color/text_secondary"
+            android:layout_marginBottom="24dp" />
+
+        <TextView
+            android:id="@+id/conditionsQuestionTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="How do you respond?"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:layout_marginBottom="16dp" />
+
+        <Button
+            android:id="@+id/conditionsChoice1Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="Choice 1"
+            android:background="@drawable/option_background" />
+
+        <Button
+            android:id="@+id/conditionsChoice2Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Choice 2"
+            android:background="@drawable/option_background" />
+
+    </LinearLayout>
+
+    <!-- Consequences Screen -->
+    <LinearLayout
+        android:id="@+id/consequencesScreen"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/consequencesTitleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Experience the Consequences"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:layout_marginBottom="16dp" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/consequencesAnimationView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:id="@+id/consequencesDescriptionTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Consequences description"
+            android:textSize="16sp"
+            android:textColor="@color/text_secondary"
+            android:layout_marginBottom="24dp" />
+
+        <Button
+            android:id="@+id/viewFeedbackButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View Preparedness Feedback"
+            android:background="@drawable/option_background" />
+
+    </LinearLayout>
+
+    <!-- Feedback Screen -->
+    <LinearLayout
+        android:id="@+id/feedbackScreen"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/feedbackTitleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Preparedness Feedback"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:id="@+id/survivalStatusTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SURVIVED"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="@color/success"
+            android:gravity="center"
+            android:layout_marginBottom="24dp" />
+
+        <TextView
+            android:id="@+id/feedbackDescriptionTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Feedback description"
+            android:textSize="16sp"
+            android:textColor="@color/text_secondary"
+            android:layout_marginBottom="24dp" />
+
+        <TextView
+            android:id="@+id/rewardsTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="XP Earned: 100\nCoins Earned: 50"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:layout_marginBottom="24dp" />
+
+        <Button
+            android:id="@+id/returnToDashboardButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Return to Dashboard"
+            android:background="@drawable/option_background" />
+
+    </LinearLayout>
+
+    <!-- Progress Bar -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,6 +18,7 @@ import android.bignerdranch.learn2survive.domain.model.DisasterScenario;
 import android.bignerdranch.learn2survive.domain.repository.SimulationRepository;
 import android.bignerdranch.learn2survive.data.remote.SimulationRepositoryImpl;
 import android.bignerdranch.learn2survive.ui.simulation.adapters.SimulationCardAdapter;
+import android.bignerdranch.learn2survive.ui.simulation.ImmersiveScenarioActivity;
 
 public class SimulationsListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
@@ -46,8 +47,8 @@ public class SimulationsListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         adapter = new SimulationCardAdapter(scenario -> {
-            Intent intent = new Intent(this, SimulationActivity.class);
-            intent.putExtra(SimulationActivity.EXTRA_SCENARIO_ID, scenario.getId());
+            Intent intent = new Intent(this, ImmersiveScenarioActivity.class);
+            intent.putExtra(ImmersiveScenarioActivity.EXTRA_SCENARIO_ID, scenario.getId());
             startActivity(intent);
         });
         recyclerView.setAdapter(adapter);

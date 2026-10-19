@@ -29,7 +29,7 @@
             android:contentDescription="@string/app_name"
             android:padding="24dp"
             android:src="@android:drawable/ic_dialog_info"
-            android:tint="@color/white" />
+            app:tint="@color/white" />
 
     </androidx.cardview.widget.CardView>
 

@@ -49,12 +49,21 @@ public class AuthViewModel extends ViewModel {
                 // Provide user-friendly error messages
                 String userFriendlyMessage = errorMessage;
                 if (errorMessage != null) {
-                    if (errorMessage.contains("invalid credential") || errorMessage.contains("wrong password")) {
-                        userFriendlyMessage = "Invalid email or password.";
-                    } else if (errorMessage.contains("user not found")) {
-                        userFriendlyMessage = "User not found. Please register first.";
-                    } else if (errorMessage.contains("network")) {
+                    String lowerError = errorMessage.toLowerCase();
+                    if (lowerError.contains("invalid credential") ||
+                        lowerError.contains("wrong password") ||
+                        lowerError.contains("the password is invalid")) {
+                        userFriendlyMessage = "Invalid email or password. Please try again.";
+                    } else if (lowerError.contains("user not found") ||
+                               lowerError.contains("there is no user record")) {
+                        userFriendlyMessage = "No account found with this email. Please register first.";
+                    } else if (lowerError.contains("network") ||
+                               lowerError.contains("internet")) {
                         userFriendlyMessage = "Network error. Please check your internet connection.";
+                    } else if (lowerError.contains("too many requests")) {
+                        userFriendlyMessage = "Too many attempts. Please try again later.";
+                    } else if (lowerError.contains("disabled")) {
+                        userFriendlyMessage = "This account has been disabled.";
                     }
                 }
                 errorLiveData.setValue(userFriendlyMessage);
@@ -78,14 +87,22 @@ public class AuthViewModel extends ViewModel {
                 // Provide user-friendly error messages
                 String userFriendlyMessage = errorMessage;
                 if (errorMessage != null) {
-                    if (errorMessage.contains("email already in use") || errorMessage.contains("already exists")) {
+                    String lowerError = errorMessage.toLowerCase();
+                    if (lowerError.contains("email already in use") ||
+                        lowerError.contains("already exists") ||
+                        lowerError.contains("email address is already in use")) {
                         userFriendlyMessage = "This email is already registered. Please login instead.";
-                    } else if (errorMessage.contains("weak password")) {
-                        userFriendlyMessage = "Password is too weak. Please use a stronger password.";
-                    } else if (errorMessage.contains("invalid email")) {
+                    } else if (lowerError.contains("weak password") ||
+                               lowerError.contains("password should be at least")) {
+                        userFriendlyMessage = "Password is too weak. Please use at least 6 characters.";
+                    } else if (lowerError.contains("invalid email") ||
+                               lowerError.contains("malformed")) {
                         userFriendlyMessage = "Invalid email address format.";
-                    } else if (errorMessage.contains("network")) {
+                    } else if (lowerError.contains("network") ||
+                               lowerError.contains("internet")) {
                         userFriendlyMessage = "Network error. Please check your internet connection.";
+                    } else if (lowerError.contains("too many requests")) {
+                        userFriendlyMessage = "Too many attempts. Please try again later.";
                     }
                 }
                 errorLiveData.setValue(userFriendlyMessage);

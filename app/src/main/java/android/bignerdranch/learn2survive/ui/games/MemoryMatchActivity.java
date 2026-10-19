@@ -164,7 +164,7 @@ public class MemoryMatchActivity extends BaseGameActivity {
         GridLayout.LayoutParams params = new GridLayout.LayoutParams();
         params.width = 0;
         params.height = GridLayout.LayoutParams.WRAP_CONTENT;
-        params.columnSpec = GridLayout.spec(GridLayout.UNSPECIFIED, 1f);
+        params.columnSpec = GridLayout.spec(0, 1f);
         params.setMargins(8, 8, 8, 8);
         cardView.setLayoutParams(params);
         
@@ -322,7 +322,7 @@ public class MemoryMatchActivity extends BaseGameActivity {
         cardView.startAnimation(flipAnimation);
     }
     
-    private void updateUI() {
+    protected void updateUI() {
         matchesTextView.setText(String.format("Matches: %d/%d", matchesFound, totalPairs));
         
         // Update progress bar

@@ -70,7 +70,7 @@ public class AchievementAdapter extends RecyclerView.Adapter<AchievementAdapter.
             rewardText.setText(String.format("+%d XP  +%d Coins", achievement.getXpReward(), achievement.getCoinsReward()));
             
             // Set icon (in real app, load from resource ID)
-            achievementIcon.setImageResource(android.R.drawable.ic_menu_star);
+            achievementIcon.setImageResource(android.R.drawable.ic_menu_info_details);
             
             // Check completion status
             boolean isCompleted = false;

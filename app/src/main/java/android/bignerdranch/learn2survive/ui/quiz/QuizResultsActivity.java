@@ -263,30 +263,24 @@ public class QuizResultsActivity extends AppCompatActivity {
     private void updateLessonProgress() {
         android.bignerdranch.learn2survive.domain.repository.LessonRepository lessonRepository =
                 new android.bignerdranch.learn2survive.data.remote.LessonRepositoryImpl();
-        
-        lessonRepository.getUserProgress(getCurrentUserId(), lessonId,
-                new android.bignerdranch.learn2survive.domain.repository.LessonRepository.UserProgressCallback() {
-                    @Override
-                    public void onSuccess(android.bignerdranch.learn2survive.domain.model.UserProgress progress) {
+
+        lessonRepository.getUserProgress(getCurrentUserId(), lessonId)
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        android.bignerdranch.learn2survive.domain.model.UserProgress progress =
+                                documentSnapshot.toObject(android.bignerdranch.learn2survive.domain.model.UserProgress.class);
                         if (progress != null) {
                             progress.setCompleted(true);
                             progress.setCompletedAt(new java.util.Date());
-                            lessonRepository.saveUserProgress(progress,
-                                    new android.bignerdranch.learn2survive.domain.repository.LessonRepository.SaveCallback() {
-                                        @Override
-                                        public void onSuccess(String documentId) {
-                                        }
-
-                                        @Override
-                                        public void onFailure(Exception e) {
-                                        }
+                            lessonRepository.saveUserProgress(progress)
+                                    .addOnSuccessListener(aVoid -> {
+                                    })
+                                    .addOnFailureListener(e -> {
                                     });
                         }
                     }
-
-                    @Override
-                    public void onFailure(Exception e) {
-                    }
+                })
+                .addOnFailureListener(e -> {
                 });
     }
 

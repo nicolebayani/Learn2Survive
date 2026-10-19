@@ -18,6 +18,19 @@ public class SimulationResult {
     private int coinsEarned;
     private int stars;
 
+    // Detailed scoring breakdown
+    private int situationEvaluationScore;
+    private int suppliesSelectionScore;
+    private int evacuationDecisionScore;
+    private int adaptabilityScore;
+    private int finalOutcomeScore;
+    private int totalScore;
+
+    // Progress tracking
+    private int attemptNumber;
+    private int bestScore;
+    private double disasterProgress;
+
     public SimulationResult() {
     }
 
@@ -152,5 +165,77 @@ public class SimulationResult {
 
     public void setStars(int stars) {
         this.stars = stars;
+    }
+
+    public int getSituationEvaluationScore() {
+        return situationEvaluationScore;
+    }
+
+    public void setSituationEvaluationScore(int situationEvaluationScore) {
+        this.situationEvaluationScore = situationEvaluationScore;
+    }
+
+    public int getSuppliesSelectionScore() {
+        return suppliesSelectionScore;
+    }
+
+    public void setSuppliesSelectionScore(int suppliesSelectionScore) {
+        this.suppliesSelectionScore = suppliesSelectionScore;
+    }
+
+    public int getEvacuationDecisionScore() {
+        return evacuationDecisionScore;
+    }
+
+    public void setEvacuationDecisionScore(int evacuationDecisionScore) {
+        this.evacuationDecisionScore = evacuationDecisionScore;
+    }
+
+    public int getAdaptabilityScore() {
+        return adaptabilityScore;
+    }
+
+    public void setAdaptabilityScore(int adaptabilityScore) {
+        this.adaptabilityScore = adaptabilityScore;
+    }
+
+    public int getFinalOutcomeScore() {
+        return finalOutcomeScore;
+    }
+
+    public void setFinalOutcomeScore(int finalOutcomeScore) {
+        this.finalOutcomeScore = finalOutcomeScore;
+    }
+
+    public int getTotalScore() {
+        return totalScore;
+    }
+
+    public void setTotalScore(int totalScore) {
+        this.totalScore = totalScore;
+    }
+
+    public int getAttemptNumber() {
+        return attemptNumber;
+    }
+
+    public void setAttemptNumber(int attemptNumber) {
+        this.attemptNumber = attemptNumber;
+    }
+
+    public int getBestScore() {
+        return bestScore;
+    }
+
+    public void setBestScore(int bestScore) {
+        this.bestScore = bestScore;
+    }
+
+    public double getDisasterProgress() {
+        return disasterProgress;
+    }
+
+    public void setDisasterProgress(double disasterProgress) {
+        this.disasterProgress = disasterProgress;
     }
 }

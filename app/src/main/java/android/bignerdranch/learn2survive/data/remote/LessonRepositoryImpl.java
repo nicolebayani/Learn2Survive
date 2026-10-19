@@ -93,7 +93,7 @@ public class LessonRepositoryImpl implements LessonRepository {
         DocumentReference docRef = db.collection(COLLECTION_USER_PROGRESS)
                 .document(userId + "_" + lessonId);
         
-        return dbRef.update("completedSectionIds", FieldValue.arrayUnion(sectionId),
+        return docRef.update("completedSectionIds", FieldValue.arrayUnion(sectionId),
                           "lastAccessedAt", new Date());
     }
 

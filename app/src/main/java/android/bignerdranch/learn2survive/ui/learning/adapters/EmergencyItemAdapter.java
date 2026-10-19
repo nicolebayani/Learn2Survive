@@ -12,12 +12,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import android.bignerdranch.learn2survive.R;
-import android.bignerdranch.learn2survive.ui.learning.fragments.lesson.EmergencyKitFragment;
+import android.bignerdranch.learn2survive.ui.games.models.EmergencyItem;
 
 public class EmergencyItemAdapter extends RecyclerView.Adapter<EmergencyItemAdapter.ItemViewHolder> {
-    private List<EmergencyKitFragment.EmergencyItem> items;
+    private List<EmergencyItem> items;
 
-    public EmergencyItemAdapter(List<EmergencyKitFragment.EmergencyItem> items) {
+    public EmergencyItemAdapter(List<EmergencyItem> items) {
         this.items = items;
     }
 
@@ -31,7 +31,7 @@ public class EmergencyItemAdapter extends RecyclerView.Adapter<EmergencyItemAdap
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        EmergencyKitFragment.EmergencyItem item = items.get(position);
+        EmergencyItem item = items.get(position);
         holder.bind(item);
     }
 
@@ -52,10 +52,10 @@ public class EmergencyItemAdapter extends RecyclerView.Adapter<EmergencyItemAdap
             descriptionTextView = itemView.findViewById(R.id.descriptionTextView);
         }
 
-        public void bind(EmergencyKitFragment.EmergencyItem item) {
-            nameTextView.setText(item.name);
-            descriptionTextView.setText(item.description);
-            iconImageView.setImageResource(item.iconRes);
+        public void bind(EmergencyItem item) {
+            nameTextView.setText(item.getName());
+            descriptionTextView.setText(item.getDescription());
+            iconImageView.setImageResource(item.getIconResId());
         }
     }
 }

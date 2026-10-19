@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
+// import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -269,15 +270,15 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void showCorrectAnimation() {
-        LottieAnimationView animation = new LottieAnimationView(this);
-        animation.setAnimation("correct_answer.json");
-        animation.playAnimation();
+        // LottieAnimationView animation = new LottieAnimationView(this);
+        // animation.setAnimation("correct_answer.json");
+        // animation.playAnimation();
     }
 
     private void showWrongAnimation() {
-        LottieAnimationView animation = new LottieAnimationView(this);
-        animation.setAnimation("wrong_answer.json");
-        animation.playAnimation();
+        // LottieAnimationView animation = new LottieAnimationView(this);
+        // animation.setAnimation("wrong_answer.json");
+        // animation.playAnimation();
     }
 
     private void showExplanation(String explanation) {

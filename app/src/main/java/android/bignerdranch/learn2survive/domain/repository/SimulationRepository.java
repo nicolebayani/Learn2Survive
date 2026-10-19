@@ -1,6 +1,7 @@
 package android.bignerdranch.learn2survive.domain.repository;
 
 import android.bignerdranch.learn2survive.domain.model.DisasterScenario;
+import android.bignerdranch.learn2survive.domain.model.DisasterSimulationType;
 import android.bignerdranch.learn2survive.domain.model.ScenarioNode;
 import android.bignerdranch.learn2survive.domain.model.SimulationAttempt;
 import android.bignerdranch.learn2survive.domain.model.SimulationResult;

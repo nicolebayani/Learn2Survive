@@ -19,6 +19,9 @@ public class SplashActivity extends AppCompatActivity {
     private static final String PREFS_NAME = "Learn2SurvivePrefs";
     private static final String KEY_ONBOARDING_COMPLETED = "onboarding_completed";
     private static final long SPLASH_DURATION = 2500;
+    private static final long AUTH_TIMEOUT = 5000;
+    private Handler timeoutHandler;
+    private Runnable timeoutRunnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +35,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void setupAnimations() {
         binding.loadingIndicator.setVisibility(android.view.View.VISIBLE);
+        binding.getRoot().transitionToEnd();
     }
 
     private void navigateAfterDelay() {
@@ -43,11 +47,23 @@ public class SplashActivity extends AppCompatActivity {
     private void checkUserStatusAndNavigate() {
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         boolean onboardingCompleted = prefs.getBoolean(KEY_ONBOARDING_COMPLETED, false);
-        
+
+        // Set up timeout handler
+        timeoutHandler = new Handler(Looper.getMainLooper());
+        timeoutRunnable = () -> {
+            // Timeout reached, navigate to login/onboarding
+            navigateToNextScreen(onboardingCompleted);
+        };
+        timeoutHandler.postDelayed(timeoutRunnable, AUTH_TIMEOUT);
+
         // Check if user is logged in AND has data in Firestore
         DependencyProvider.provideAuthRepository().getCurrentUser(new android.bignerdranch.learn2survive.domain.repository.AuthRepository.AuthCallback() {
             @Override
             public void onSuccess(android.bignerdranch.learn2survive.domain.model.User user) {
+                // Cancel timeout
+                if (timeoutHandler != null && timeoutRunnable != null) {
+                    timeoutHandler.removeCallbacks(timeoutRunnable);
+                }
                 // User exists in both Firebase Auth and Firestore
                 Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
                 startActivity(intent);
@@ -57,23 +73,36 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String errorMessage) {
-                // User not logged in or no data in Firestore
-                Intent intent;
-                if (onboardingCompleted) {
-                    intent = new Intent(SplashActivity.this, LoginActivity.class);
-                } else {
-                    intent = new Intent(SplashActivity.this, OnboardingActivity.class);
+                // Cancel timeout
+                if (timeoutHandler != null && timeoutRunnable != null) {
+                    timeoutHandler.removeCallbacks(timeoutRunnable);
                 }
-                startActivity(intent);
-                finish();
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                // User not logged in or no data in Firestore
+                // Always go to Onboarding first to allow fresh start
+                navigateToNextScreen(false);
             }
         });
+    }
+
+    private void navigateToNextScreen(boolean onboardingCompleted) {
+        Intent intent;
+        if (onboardingCompleted) {
+            intent = new Intent(SplashActivity.this, LoginActivity.class);
+        } else {
+            intent = new Intent(SplashActivity.this, OnboardingActivity.class);
+        }
+        startActivity(intent);
+        finish();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        // Clean up timeout handler
+        if (timeoutHandler != null && timeoutRunnable != null) {
+            timeoutHandler.removeCallbacks(timeoutRunnable);
+        }
         binding = null;
     }
 }

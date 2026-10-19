@@ -492,23 +492,24 @@ public abstract class BaseGameActivity extends AppCompatActivity {
     
     protected void showScoreAnimation(int points) {
         // Implement score popup animation
+        // Animation files not available - commented out
         if (animationView != null) {
-            animationView.setAnimation(R.raw.score_popup);
-            animationView.playAnimation();
+            // animationView.setAnimation(R.raw.score_popup);
+            // animationView.playAnimation();
         }
     }
-    
+
     protected void showCorrectAnimation() {
         if (animationView != null) {
-            animationView.setAnimation(R.raw.correct);
-            animationView.playAnimation();
+            // animationView.setAnimation(R.raw.correct);
+            // animationView.playAnimation();
         }
     }
-    
+
     protected void showWrongAnimation() {
         if (animationView != null) {
-            animationView.setAnimation(R.raw.wrong);
-            animationView.playAnimation();
+            // animationView.setAnimation(R.raw.wrong);
+            // animationView.playAnimation();
         }
     }
     

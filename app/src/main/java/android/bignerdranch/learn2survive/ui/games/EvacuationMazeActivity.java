@@ -179,8 +179,8 @@ public class EvacuationMazeActivity extends BaseGameActivity {
         GridLayout.LayoutParams params = new GridLayout.LayoutParams();
         params.width = 0;
         params.height = GridLayout.LayoutParams.WRAP_CONTENT;
-        params.columnSpec = GridLayout.spec(GridLayout.UNSPECIFIED, 1f);
-        params.rowSpec = GridLayout.spec(GridLayout.UNSPECIFIED, 1f);
+        params.columnSpec = GridLayout.spec(0, 1f);
+        params.rowSpec = GridLayout.spec(0, 1f);
         params.setMargins(2, 2, 2, 2);
         cellView.setLayoutParams(params);
         

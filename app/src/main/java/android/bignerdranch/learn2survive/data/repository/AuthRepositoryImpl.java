@@ -2,6 +2,7 @@ package android.bignerdranch.learn2survive.data.repository;
 
 import android.bignerdranch.learn2survive.domain.model.User;
 import android.bignerdranch.learn2survive.domain.repository.AuthRepository;
+import android.bignerdranch.learn2survive.Learn2SurviveApplication;
 import android.net.Uri;
 import android.util.Log;
 
@@ -27,21 +28,35 @@ public class AuthRepositoryImpl implements AuthRepository {
         this.firestore = FirebaseFirestore.getInstance();
     }
 
+    private boolean isNetworkAvailable() {
+        return Learn2SurviveApplication.getInstance().isNetworkAvailable();
+    }
+
     @Override
     public void login(String email, String password, final AuthCallback callback) {
+        if (!isNetworkAvailable()) {
+            Log.e(TAG, "No network connection available");
+            callback.onFailure("No internet connection. Please check your network and try again.");
+            return;
+        }
+
+        Log.d(TAG, "Attempting login for email: " + email);
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        Log.d(TAG, "Firebase Auth login successful");
                         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
                         if (firebaseUser != null) {
+                            Log.d(TAG, "User ID: " + firebaseUser.getUid());
                             getUserFromFirestore(firebaseUser.getUid(), email, firebaseUser.getDisplayName(), callback);
                         } else {
+                            Log.e(TAG, "Firebase user is null after successful login");
                             callback.onFailure("User not found");
                         }
                     } else {
-                        String errorMessage = task.getException() != null 
-                                ? task.getException().getMessage() 
-                                : "Login failed";
+                        Exception exception = task.getException();
+                        String errorMessage = exception != null ? exception.getMessage() : "Login failed";
+                        Log.e(TAG, "Firebase Auth login failed: " + errorMessage, exception);
                         callback.onFailure(errorMessage);
                     }
                 });
@@ -49,19 +64,29 @@ public class AuthRepositoryImpl implements AuthRepository {
 
     @Override
     public void register(String email, String password, String fullName, final AuthCallback callback) {
+        if (!isNetworkAvailable()) {
+            Log.e(TAG, "No network connection available");
+            callback.onFailure("No internet connection. Please check your network and try again.");
+            return;
+        }
+
+        Log.d(TAG, "Attempting registration for email: " + email + ", name: " + fullName);
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        Log.d(TAG, "Firebase Auth registration successful");
                         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
                         if (firebaseUser != null) {
+                            Log.d(TAG, "User ID: " + firebaseUser.getUid());
                             saveUserToFirestore(firebaseUser.getUid(), email, fullName, callback);
                         } else {
+                            Log.e(TAG, "Firebase user is null after successful registration");
                             callback.onFailure("Registration failed");
                         }
                     } else {
-                        String errorMessage = task.getException() != null 
-                                ? task.getException().getMessage() 
-                                : "Registration failed";
+                        Exception exception = task.getException();
+                        String errorMessage = exception != null ? exception.getMessage() : "Registration failed";
+                        Log.e(TAG, "Firebase Auth registration failed: " + errorMessage, exception);
                         callback.onFailure(errorMessage);
                     }
                 });
@@ -90,11 +115,16 @@ public class AuthRepositoryImpl implements AuthRepository {
 
     @Override
     public void getCurrentUser(final AuthCallback callback) {
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-        if (firebaseUser != null) {
-            getUserFromFirestore(firebaseUser.getUid(), firebaseUser.getEmail(), firebaseUser.getDisplayName(), callback);
-        } else {
-            callback.onFailure("No user logged in");
+        try {
+            FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+            if (firebaseUser != null) {
+                getUserFromFirestore(firebaseUser.getUid(), firebaseUser.getEmail(), firebaseUser.getDisplayName(), callback);
+            } else {
+                callback.onFailure("No user logged in");
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error getting current user", e);
+            callback.onFailure("Error: " + e.getMessage());
         }
     }
 

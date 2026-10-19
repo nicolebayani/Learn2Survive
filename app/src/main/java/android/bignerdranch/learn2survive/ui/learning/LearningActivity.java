@@ -16,6 +16,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.bignerdranch.learn2survive.R;
 import android.bignerdranch.learn2survive.ui.learning.fragments.LessonsListFragment;
 import android.bignerdranch.learn2survive.ui.learning.fragments.BookmarkedLessonsFragment;
+import android.bignerdranch.learn2survive.ui.learning.fragments.ProgressFragment;
 import android.bignerdranch.learn2survive.ui.simulation.SimulationsListActivity;
 
 public class LearningActivity extends AppCompatActivity {

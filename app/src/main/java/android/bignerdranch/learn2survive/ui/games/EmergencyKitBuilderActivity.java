@@ -121,7 +121,7 @@ public class EmergencyKitBuilderActivity extends BaseGameActivity {
         
         // Add some non-essential items as distractions
         availableItems.add(new EmergencyItem("Toy", "Not essential", android.R.drawable.ic_menu_slideshow, false, -5));
-        availableItems.add(new EmergencyItem("Laptop", "Not essential", android.R.drawable.ic_menu_computer, false, -5));
+        availableItems.add(new EmergencyItem("Laptop", "Not essential", android.R.drawable.ic_menu_info_details, false, -5));
         
         // Shuffle and limit items
         java.util.Collections.shuffle(availableItems);
@@ -138,7 +138,7 @@ public class EmergencyKitBuilderActivity extends BaseGameActivity {
             android.widget.GridLayout.LayoutParams params = new android.widget.GridLayout.LayoutParams();
             params.width = 0;
             params.height = android.widget.GridLayout.LayoutParams.WRAP_CONTENT;
-            params.columnSpec = android.widget.GridLayout.spec(android.widget.GridLayout.UNSPECIFIED, 1f);
+            params.columnSpec = android.widget.GridLayout.spec(0, 1f);
             params.setMargins(8, 8, 8, 8);
             itemView.setLayoutParams(params);
             itemsContainer.addView(itemView);

@@ -77,12 +77,12 @@ public class LevelUpView extends LinearLayout {
         levelNumber.setScaleY(0f);
         
         // Level up animation
-        levelUpAnimation.setAnimation(R.raw.level_up);
-        levelUpAnimation.playAnimation();
-        
+        // levelUpAnimation.setAnimation(R.raw.level_up);
+        // levelUpAnimation.playAnimation();
+
         // Confetti animation
-        confettiAnimation.setAnimation(R.raw.confetti);
-        confettiAnimation.playAnimation();
+        // confettiAnimation.setAnimation(R.raw.confetti);
+        // confettiAnimation.playAnimation();
         
         // Background scale animation
         ObjectAnimator scaleX = ObjectAnimator.ofFloat(backgroundView, "scaleX", 0.3f, 1.2f, 1f);

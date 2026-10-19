@@ -1,8 +1,10 @@
 package android.bignerdranch.learn2survive.domain.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Question {
+public class Question implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String id;
     private String quizId;
     private String questionText;

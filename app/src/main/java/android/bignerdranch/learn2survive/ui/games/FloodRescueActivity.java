@@ -128,7 +128,7 @@ public class FloodRescueActivity extends BaseGameActivity {
             android.widget.GridLayout.LayoutParams params = new android.widget.GridLayout.LayoutParams();
             params.width = 0;
             params.height = android.widget.GridLayout.LayoutParams.WRAP_CONTENT;
-            params.columnSpec = android.widget.GridLayout.spec(android.widget.GridLayout.UNSPECIFIED, 1f);
+            params.columnSpec = android.widget.GridLayout.spec(0, 1f);
             params.setMargins(8, 8, 8, 8);
             personView.setLayoutParams(params);
             peopleGrid.addView(personView);
@@ -248,7 +248,7 @@ public class FloodRescueActivity extends BaseGameActivity {
         handler.postDelayed(waterRiseRunnable, waterRiseInterval);
     }
     
-    private void updateUI() {
+    protected void updateUI() {
         waterLevelTextView.setText("Water Level: " + waterLevel + "%");
         rescuedTextView.setText("Rescued: " + rescuedPeople.size() + "/" + peopleToRescue);
         

@@ -125,7 +125,7 @@ public class TyphoonHouseDefenderActivity extends BaseGameActivity {
             android.widget.GridLayout.LayoutParams params = new android.widget.GridLayout.LayoutParams();
             params.width = 0;
             params.height = android.widget.GridLayout.LayoutParams.WRAP_CONTENT;
-            params.columnSpec = android.widget.GridLayout.spec(android.widget.GridLayout.UNSPECIFIED, 1f);
+            params.columnSpec = android.widget.GridLayout.spec(0, 1f);
             params.setMargins(8, 8, 8, 8);
             taskView.setLayoutParams(params);
             tasksGrid.addView(taskView);
@@ -200,7 +200,7 @@ public class TyphoonHouseDefenderActivity extends BaseGameActivity {
         handler.postDelayed(countdownRunnable, 1000);
     }
     
-    private void updateUI() {
+    protected void updateUI() {
         stormTimerTextView.setText("Storm in: " + stormCountdown + "s");
         securedTextView.setText("Secured: " + securedTasks.size() + "/" + totalTasks);
         

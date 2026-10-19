@@ -17,6 +17,10 @@ public class MemoryCard {
         return iconRes;
     }
 
+    public int getIconResId() {
+        return iconRes;
+    }
+
     public int getPairId() {
         return pairId;
     }

@@ -87,7 +87,7 @@ public class BadgeAdapter extends RecyclerView.Adapter<BadgeAdapter.BadgeViewHol
             badgeRarity.setTextColor(itemView.getContext().getResources().getColor(rarityColor));
             
             // Set icon (in real app, load from resource ID)
-            badgeIcon.setImageResource(android.R.drawable.ic_menu_star);
+            badgeIcon.setImageResource(android.R.drawable.ic_menu_info_details);
             
             // Check if unlocked
             boolean isUnlocked = false;
