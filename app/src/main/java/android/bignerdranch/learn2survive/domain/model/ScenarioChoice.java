@@ -1,26 +1,19 @@
 package android.bignerdranch.learn2survive.domain.model;
 
+/**
+ * Legacy ScenarioChoice class for backward compatibility with old SimulationActivity.
+ * This is separate from the new ScenarioStepChoice used by the reusable engine.
+ */
 public class ScenarioChoice {
     private String id;
     private String choiceText;
-    private String nextNodeId;
-    private boolean isCorrect;
     private String explanation;
     private int xpReward;
     private int timePenaltySeconds;
+    private String nextNodeId;
+    private boolean isCorrect;
 
     public ScenarioChoice() {
-    }
-
-    public ScenarioChoice(String id, String choiceText, String nextNodeId,
-                         boolean isCorrect, String explanation, int xpReward, int timePenaltySeconds) {
-        this.id = id;
-        this.choiceText = choiceText;
-        this.nextNodeId = nextNodeId;
-        this.isCorrect = isCorrect;
-        this.explanation = explanation;
-        this.xpReward = xpReward;
-        this.timePenaltySeconds = timePenaltySeconds;
     }
 
     public String getId() {
@@ -37,22 +30,6 @@ public class ScenarioChoice {
 
     public void setChoiceText(String choiceText) {
         this.choiceText = choiceText;
-    }
-
-    public String getNextNodeId() {
-        return nextNodeId;
-    }
-
-    public void setNextNodeId(String nextNodeId) {
-        this.nextNodeId = nextNodeId;
-    }
-
-    public boolean isCorrect() {
-        return isCorrect;
-    }
-
-    public void setCorrect(boolean correct) {
-        isCorrect = correct;
     }
 
     public String getExplanation() {
@@ -77,5 +54,21 @@ public class ScenarioChoice {
 
     public void setTimePenaltySeconds(int timePenaltySeconds) {
         this.timePenaltySeconds = timePenaltySeconds;
+    }
+
+    public String getNextNodeId() {
+        return nextNodeId;
+    }
+
+    public void setNextNodeId(String nextNodeId) {
+        this.nextNodeId = nextNodeId;
+    }
+
+    public boolean isCorrect() {
+        return isCorrect;
+    }
+
+    public void setCorrect(boolean correct) {
+        isCorrect = correct;
     }
 }
