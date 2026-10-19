@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Brand Colors -->
-    <color name="primary">#1565C0</color>
-    <color name="primary_dark">#0D47A1</color>
-    <color name="primary_light">#5E92F3</color>
-    <color name="secondary">#2E7D32</color>
-    <color name="secondary_dark">#005005</color>
-    <color name="secondary_light">#60AD5E</color>
-    <color name="accent">#F9A825</color>
-    <color name="accent_dark">#C17900</color>
-    <color name="accent_light">#FFD94E</color>
+    <!-- Brand Colors - Disaster Preparedness Theme -->
+    <color name="primary">#0A192F</color> <!-- Deep Navy -->
+    <color name="primary_dark">#051020</color>
+    <color name="primary_light">#1E3A5F</color> <!-- Ocean Blue -->
+    <color name="secondary">#009688</color> <!-- Teal/Emerald - Positive Action -->
+    <color name="secondary_dark">#00695C</color>
+    <color name="secondary_light">#4DB6AC</color>
+    <color name="accent">#FFB300</color> <!-- Amber - Warning -->
+    <color name="accent_dark">#FF8F00</color>
+    <color name="accent_light">#FFE54C</color>
+    <color name="danger">#D32F2F</color> <!-- Red - Danger -->
+    <color name="danger_dark">#B71C1C</color>
+    <color name="danger_light">#FF5252</color>
     
     <!-- Background Colors -->
     <color name="background">#F5F7FA</color>
@@ -38,10 +41,10 @@
     <color name="info">#2196F3</color>
     
     <!-- Gradient Colors -->
-    <color name="gradient_start">#1565C0</color>
-    <color name="gradient_end">#2E7D32</color>
-    <color name="gradient_accent_start">#F9A825</color>
-    <color name="gradient_accent_end">#FF6F00</color>
+    <color name="gradient_start">#0A192F</color>
+    <color name="gradient_end">#1E3A5F</color>
+    <color name="gradient_accent_start">#FFB300</color>
+    <color name="gradient_accent_end">#FF8F00</color>
     
     <!-- Common Colors -->
     <color name="black">#FF000000</color>
