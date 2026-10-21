@@ -153,8 +153,17 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void addAchievement(String userId, String achievementId, final UserDataCallback callback) {
         DocumentReference docRef = firestore.collection(USERS_COLLECTION).document(userId);
-        
+
         docRef.update("achievements", FieldValue.arrayUnion(achievementId))
+                .addOnSuccessListener(aVoid -> getUserData(userId, callback))
+                .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
+    }
+
+    @Override
+    public void incrementScenarios(String userId, final UserDataCallback callback) {
+        DocumentReference docRef = firestore.collection(USERS_COLLECTION).document(userId);
+
+        docRef.update("completedScenarios", FieldValue.increment(1))
                 .addOnSuccessListener(aVoid -> getUserData(userId, callback))
                 .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
     }

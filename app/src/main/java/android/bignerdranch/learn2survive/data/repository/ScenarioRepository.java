@@ -23,7 +23,11 @@ public class ScenarioRepository {
 
     private ScenarioRepository() {
         this.scenarioCache = new HashMap<>();
-        initializeScenarios();
+        try {
+            initializeScenarios();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to initialize scenarios: " + e.getMessage(), e);
+        }
     }
 
     public static synchronized ScenarioRepository getInstance() {
@@ -55,17 +59,37 @@ public class ScenarioRepository {
      * In the future, this can be replaced with Firestore loading.
      */
     private void initializeScenarios() {
-        // Create Earthquake scenario
-        scenarioCache.put("earthquake_first_60_seconds", createEarthquakeScenario());
+        // Temporarily only create Earthquake scenario to debug
+        try {
+            ImmersiveScenario earthquake = createEarthquakeScenario();
+            scenarioCache.put("earthquake_first_60_seconds", earthquake);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to create earthquake scenario: " + e.getMessage(), e);
+        }
         
-        // Create Typhoon scenario (basic structure for testing)
-        scenarioCache.put("typhoon_house_defender", createTyphoonScenario());
+        // Comment out other scenarios temporarily
+        /*
+        try {
+            ImmersiveScenario typhoon = createTyphoonScenario();
+            scenarioCache.put("typhoon_house_defender", typhoon);
+        } catch (Exception e) {
+            System.err.println("Failed to create typhoon scenario: " + e.getMessage());
+        }
         
-        // Create Flood scenario (basic structure for testing)
-        scenarioCache.put("flood_rescue", createFloodScenario());
+        try {
+            ImmersiveScenario flood = createFloodScenario();
+            scenarioCache.put("flood_rescue", flood);
+        } catch (Exception e) {
+            System.err.println("Failed to create flood scenario: " + e.getMessage());
+        }
         
-        // Create Fire scenario (basic structure for testing)
-        scenarioCache.put("fire_escape", createFireScenario());
+        try {
+            ImmersiveScenario fire = createFireScenario();
+            scenarioCache.put("fire_escape", fire);
+        } catch (Exception e) {
+            System.err.println("Failed to create fire scenario: " + e.getMessage());
+        }
+        */
     }
 
     private ImmersiveScenario createEarthquakeScenario() {

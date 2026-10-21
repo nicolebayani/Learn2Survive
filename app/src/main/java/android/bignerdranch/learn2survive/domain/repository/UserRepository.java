@@ -9,7 +9,8 @@ public interface UserRepository {
     void updateCoins(String userId, int coinsToAdd, UserDataCallback callback);
     void updateStreak(String userId, UserDataCallback callback);
     void addAchievement(String userId, String achievementId, UserDataCallback callback);
-    
+    void incrementScenarios(String userId, UserDataCallback callback);
+
     interface UserDataCallback {
         void onSuccess(User user);
         void onFailure(String errorMessage);

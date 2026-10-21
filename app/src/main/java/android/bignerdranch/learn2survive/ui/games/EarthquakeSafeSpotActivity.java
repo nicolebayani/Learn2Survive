@@ -168,8 +168,8 @@ public class EarthquakeSafeSpotActivity extends BaseGameActivity {
         GridLayout.LayoutParams params = new GridLayout.LayoutParams();
         params.width = 0;
         params.height = GridLayout.LayoutParams.WRAP_CONTENT;
-        params.columnSpec = GridLayout.spec(0, 1f);
-        params.rowSpec = GridLayout.spec(0, 1f);
+        params.columnSpec = GridLayout.spec(spot.getCol(), 1f);
+        params.rowSpec = GridLayout.spec(spot.getRow(), 1f);
         params.setMargins(4, 4, 4, 4);
         spotView.setLayoutParams(params);
         

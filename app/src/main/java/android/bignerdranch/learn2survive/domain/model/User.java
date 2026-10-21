@@ -21,6 +21,7 @@ public class User {
     private Map<String, Object> statistics;
     private int completedLessons;
     private int completedQuizzes;
+    private int completedScenarios;
 
     public User() {
         // Default values
@@ -31,6 +32,7 @@ public class User {
         this.dailyStreak = 0;
         this.completedLessons = 0;
         this.completedQuizzes = 0;
+        this.completedScenarios = 0;
     }
 
     public User(String userId, String email, String fullName, String profileImageUrl, long createdAt) {
@@ -46,6 +48,7 @@ public class User {
         this.dailyStreak = 0;
         this.completedLessons = 0;
         this.completedQuizzes = 0;
+        this.completedScenarios = 0;
     }
 
     public String getUserId() {
@@ -166,5 +169,13 @@ public class User {
 
     public void setCompletedQuizzes(int completedQuizzes) {
         this.completedQuizzes = completedQuizzes;
+    }
+
+    public int getCompletedScenarios() {
+        return completedScenarios;
+    }
+
+    public void setCompletedScenarios(int completedScenarios) {
+        this.completedScenarios = completedScenarios;
     }
 }

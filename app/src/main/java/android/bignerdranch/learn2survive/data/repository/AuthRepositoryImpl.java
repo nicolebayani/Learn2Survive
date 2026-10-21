@@ -180,6 +180,7 @@ public class AuthRepositoryImpl implements AuthRepository {
         userMap.put("statistics", new HashMap<>());
         userMap.put("completedLessons", 0);
         userMap.put("completedQuizzes", 0);
+        userMap.put("completedScenarios", 0);
 
         firestore.collection(USERS_COLLECTION)
                 .document(userId)

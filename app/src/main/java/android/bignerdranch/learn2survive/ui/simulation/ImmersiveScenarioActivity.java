@@ -19,20 +19,27 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import android.bignerdranch.learn2survive.R;
 import android.bignerdranch.learn2survive.data.repository.ScenarioRepository;
+import android.bignerdranch.learn2survive.data.repository.ScenarioAttemptRepositoryImpl;
+import android.bignerdranch.learn2survive.data.repository.UserRepositoryImpl;
 import android.bignerdranch.learn2survive.domain.engine.ScenarioEngine;
 import android.bignerdranch.learn2survive.domain.model.DisasterCondition;
 import android.bignerdranch.learn2survive.domain.model.EmergencySupply;
 import android.bignerdranch.learn2survive.domain.model.ImmersiveScenario;
+import android.bignerdranch.learn2survive.domain.model.ScenarioAttempt;
 import android.bignerdranch.learn2survive.domain.model.ScenarioPhase;
 import android.bignerdranch.learn2survive.domain.model.ScenarioStep;
 import android.bignerdranch.learn2survive.domain.model.ScenarioStepChoice;
+import android.bignerdranch.learn2survive.domain.repository.ScenarioAttemptRepository;
 import android.bignerdranch.learn2survive.ui.simulation.adapters.SupplySelectionAdapter;
+
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 public class ImmersiveScenarioActivity extends AppCompatActivity {
     public static final String EXTRA_SCENARIO_ID = "scenario_id";
@@ -100,10 +107,13 @@ public class ImmersiveScenarioActivity extends AppCompatActivity {
     private ProgressBar progressBar;
 
     private ScenarioRepository scenarioRepository;
+    private ScenarioAttemptRepository scenarioAttemptRepository;
+    private UserRepositoryImpl userRepository;
     private ScenarioEngine scenarioEngine;
     private ImmersiveScenario scenario;
     private SupplySelectionAdapter supplyAdapter;
     private List<EmergencySupply> selectedSupplies;
+    private String currentUserId;
 
     private MediaPlayer soundPlayer;
     private CountDownTimer countdownTimer;
@@ -117,7 +127,13 @@ public class ImmersiveScenarioActivity extends AppCompatActivity {
         String scenarioId = getIntent().getStringExtra(EXTRA_SCENARIO_ID);
 
         scenarioRepository = ScenarioRepository.getInstance();
+        scenarioAttemptRepository = new ScenarioAttemptRepositoryImpl();
+        userRepository = new UserRepositoryImpl();
         selectedSupplies = new ArrayList<>();
+
+        currentUserId = FirebaseAuth.getInstance().getCurrentUser() != null
+                ? FirebaseAuth.getInstance().getCurrentUser().getUid()
+                : null;
 
         initViews();
         loadScenario(scenarioId);
@@ -126,63 +142,77 @@ public class ImmersiveScenarioActivity extends AppCompatActivity {
     private void initViews() {
         // Warning Screen
         warningScreen = findViewById(R.id.warningScreen);
-        warningIconTextView = findViewById(R.id.warningIconTextView);
-        warningTitleTextView = findViewById(R.id.warningTitleTextView);
-        warningAnimationView = findViewById(R.id.warningAnimationView);
-        warningMessageTextView = findViewById(R.id.warningMessageTextView);
-        countdownTextView = findViewById(R.id.countdownTextView);
-        startScenarioButton = findViewById(R.id.startScenarioButton);
+        if (warningScreen != null) {
+            warningIconTextView = findViewById(R.id.warningIconTextView);
+            warningTitleTextView = findViewById(R.id.warningTitleTextView);
+            warningAnimationView = findViewById(R.id.warningAnimationView);
+            warningMessageTextView = findViewById(R.id.warningMessageTextView);
+            countdownTextView = findViewById(R.id.countdownTextView);
+            startScenarioButton = findViewById(R.id.startScenarioButton);
+        }
 
         // Situation Screen
         situationScreen = findViewById(R.id.situationScreen);
-        situationTitleTextView = findViewById(R.id.situationTitleTextView);
-        situationImageView = findViewById(R.id.situationImageView);
-        situationDescriptionTextView = findViewById(R.id.situationDescriptionTextView);
-        situationQuestionTextView = findViewById(R.id.situationQuestionTextView);
-        situationChoice1Button = findViewById(R.id.situationChoice1Button);
-        situationChoice2Button = findViewById(R.id.situationChoice2Button);
-        situationChoice3Button = findViewById(R.id.situationChoice3Button);
+        if (situationScreen != null) {
+            situationTitleTextView = findViewById(R.id.situationTitleTextView);
+            situationImageView = findViewById(R.id.situationImageView);
+            situationDescriptionTextView = findViewById(R.id.situationDescriptionTextView);
+            situationQuestionTextView = findViewById(R.id.situationQuestionTextView);
+            situationChoice1Button = findViewById(R.id.situationChoice1Button);
+            situationChoice2Button = findViewById(R.id.situationChoice2Button);
+            situationChoice3Button = findViewById(R.id.situationChoice3Button);
+        }
 
         // Supplies Screen
         suppliesScreen = findViewById(R.id.suppliesScreen);
-        suppliesTitleTextView = findViewById(R.id.suppliesTitleTextView);
-        suppliesLimitTextView = findViewById(R.id.suppliesLimitTextView);
-        suppliesCountTextView = findViewById(R.id.suppliesCountTextView);
-        backpackStatusTextView = findViewById(R.id.backpackStatusTextView);
-        suppliesRecyclerView = findViewById(R.id.suppliesRecyclerView);
-        confirmSuppliesButton = findViewById(R.id.confirmSuppliesButton);
+        if (suppliesScreen != null) {
+            suppliesTitleTextView = findViewById(R.id.suppliesTitleTextView);
+            suppliesLimitTextView = findViewById(R.id.suppliesLimitTextView);
+            suppliesCountTextView = findViewById(R.id.suppliesCountTextView);
+            backpackStatusTextView = findViewById(R.id.backpackStatusTextView);
+            suppliesRecyclerView = findViewById(R.id.suppliesRecyclerView);
+            confirmSuppliesButton = findViewById(R.id.confirmSuppliesButton);
+        }
 
         // Evacuation Screen
         evacuationScreen = findViewById(R.id.evacuationScreen);
-        evacuationTitleTextView = findViewById(R.id.evacuationTitleTextView);
-        evacuationDescriptionTextView = findViewById(R.id.evacuationDescriptionTextView);
-        evacuationChoice1Button = findViewById(R.id.evacuationChoice1Button);
-        evacuationChoice2Button = findViewById(R.id.evacuationChoice2Button);
-        evacuationChoice3Button = findViewById(R.id.evacuationChoice3Button);
+        if (evacuationScreen != null) {
+            evacuationTitleTextView = findViewById(R.id.evacuationTitleTextView);
+            evacuationDescriptionTextView = findViewById(R.id.evacuationDescriptionTextView);
+            evacuationChoice1Button = findViewById(R.id.evacuationChoice1Button);
+            evacuationChoice2Button = findViewById(R.id.evacuationChoice2Button);
+            evacuationChoice3Button = findViewById(R.id.evacuationChoice3Button);
+        }
 
         // Conditions Screen
         conditionsScreen = findViewById(R.id.conditionsScreen);
-        conditionsTitleTextView = findViewById(R.id.conditionsTitleTextView);
-        conditionsAnimationView = findViewById(R.id.conditionsAnimationView);
-        conditionsDescriptionTextView = findViewById(R.id.conditionsDescriptionTextView);
-        conditionsQuestionTextView = findViewById(R.id.conditionsQuestionTextView);
-        conditionsChoice1Button = findViewById(R.id.conditionsChoice1Button);
-        conditionsChoice2Button = findViewById(R.id.conditionsChoice2Button);
+        if (conditionsScreen != null) {
+            conditionsTitleTextView = findViewById(R.id.conditionsTitleTextView);
+            conditionsAnimationView = findViewById(R.id.conditionsAnimationView);
+            conditionsDescriptionTextView = findViewById(R.id.conditionsDescriptionTextView);
+            conditionsQuestionTextView = findViewById(R.id.conditionsQuestionTextView);
+            conditionsChoice1Button = findViewById(R.id.conditionsChoice1Button);
+            conditionsChoice2Button = findViewById(R.id.conditionsChoice2Button);
+        }
 
         // Consequences Screen
         consequencesScreen = findViewById(R.id.consequencesScreen);
-        consequencesTitleTextView = findViewById(R.id.consequencesTitleTextView);
-        consequencesAnimationView = findViewById(R.id.consequencesAnimationView);
-        consequencesDescriptionTextView = findViewById(R.id.consequencesDescriptionTextView);
-        viewFeedbackButton = findViewById(R.id.viewFeedbackButton);
+        if (consequencesScreen != null) {
+            consequencesTitleTextView = findViewById(R.id.consequencesTitleTextView);
+            consequencesAnimationView = findViewById(R.id.consequencesAnimationView);
+            consequencesDescriptionTextView = findViewById(R.id.consequencesDescriptionTextView);
+            viewFeedbackButton = findViewById(R.id.viewFeedbackButton);
+        }
 
         // Feedback Screen
         feedbackScreen = findViewById(R.id.feedbackScreen);
-        feedbackTitleTextView = findViewById(R.id.feedbackTitleTextView);
-        survivalStatusTextView = findViewById(R.id.survivalStatusTextView);
-        feedbackDescriptionTextView = findViewById(R.id.feedbackDescriptionTextView);
-        rewardsTextView = findViewById(R.id.rewardsTextView);
-        returnToDashboardButton = findViewById(R.id.returnToDashboardButton);
+        if (feedbackScreen != null) {
+            feedbackTitleTextView = findViewById(R.id.feedbackTitleTextView);
+            survivalStatusTextView = findViewById(R.id.survivalStatusTextView);
+            feedbackDescriptionTextView = findViewById(R.id.feedbackDescriptionTextView);
+            rewardsTextView = findViewById(R.id.rewardsTextView);
+            returnToDashboardButton = findViewById(R.id.returnToDashboardButton);
+        }
 
         progressBar = findViewById(R.id.progressBar);
 
@@ -195,33 +225,43 @@ public class ImmersiveScenarioActivity extends AppCompatActivity {
     private void loadScenario(String scenarioId) {
         progressBar.setVisibility(View.VISIBLE);
 
-        // Load scenario from repository
-        scenario = scenarioRepository.getScenario(scenarioId);
-        
-        if (scenario == null) {
-            Toast.makeText(this, "Scenario not found", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
-
-        // Validate scenario
-        if (!scenario.isValid()) {
-            Toast.makeText(this, "Invalid scenario data", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
-
-        // Initialize the scenario engine
         try {
+            // Step 1: Load scenario from repository
+            Toast.makeText(this, "Loading scenario...", Toast.LENGTH_SHORT).show();
+            scenario = scenarioRepository.getScenario(scenarioId);
+            
+            if (scenario == null) {
+                Toast.makeText(this, "Scenario not found: " + scenarioId, Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+                finish();
+                return;
+            }
+            
+            Toast.makeText(this, "Scenario loaded", Toast.LENGTH_SHORT).show();
+
+            // Step 2: Initialize the scenario engine
+            Toast.makeText(this, "Initializing engine...", Toast.LENGTH_SHORT).show();
             scenarioEngine = new ScenarioEngine(scenario);
+            Toast.makeText(this, "Engine initialized", Toast.LENGTH_SHORT).show();
+            
+            // Step 3: Set listener
             scenarioEngine.setListener(new ScenarioEngineListener());
-            getSupportActionBar().setTitle(scenario.getTitle());
+            
+            // Step 4: Set action bar title
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle(scenario.getTitle());
+            }
+            
             progressBar.setVisibility(View.GONE);
             
-            // Show the first step
+            // Step 5: Show the first step
+            Toast.makeText(this, "Showing first step...", Toast.LENGTH_SHORT).show();
             showStep(scenarioEngine.getCurrentStep());
+            
         } catch (Exception e) {
-            Toast.makeText(this, "Error initializing scenario: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+            Toast.makeText(this, "Error: " + e.getClass().getSimpleName() + " - " + e.getMessage(), Toast.LENGTH_LONG).show();
+            progressBar.setVisibility(View.GONE);
             finish();
         }
     }
@@ -256,6 +296,7 @@ public class ImmersiveScenarioActivity extends AppCompatActivity {
 
         @Override
         public void onScenarioCompleted(ScenarioEngine.ScenarioResult result) {
+            saveScenarioAttempt(result);
             showFeedback(result);
         }
 
@@ -345,8 +386,7 @@ public class ImmersiveScenarioActivity extends AppCompatActivity {
 
         // Load warning animation
         if (step.getAnimationUrl() != null && !step.getAnimationUrl().isEmpty()) {
-            warningAnimationView.setAnimationFromUrl(step.getAnimationUrl());
-            warningAnimationView.playAnimation();
+            loadLottieAnimation(warningAnimationView, step.getAnimationUrl());
         }
 
         // Start countdown
@@ -426,8 +466,7 @@ public class ImmersiveScenarioActivity extends AppCompatActivity {
 
         // Load animation
         if (step.getAnimationUrl() != null && !step.getAnimationUrl().isEmpty()) {
-            conditionsAnimationView.setAnimationFromUrl(step.getAnimationUrl());
-            conditionsAnimationView.playAnimation();
+            loadLottieAnimation(conditionsAnimationView, step.getAnimationUrl());
         }
 
         // Setup choices from step
@@ -446,8 +485,7 @@ public class ImmersiveScenarioActivity extends AppCompatActivity {
 
         // Load animation
         if (step.getAnimationUrl() != null && !step.getAnimationUrl().isEmpty()) {
-            consequencesAnimationView.setAnimationFromUrl(step.getAnimationUrl());
-            consequencesAnimationView.playAnimation();
+            loadLottieAnimation(consequencesAnimationView, step.getAnimationUrl());
         }
 
         // Setup choice to view feedback
@@ -481,7 +519,7 @@ public class ImmersiveScenarioActivity extends AppCompatActivity {
         feedbackScreen.setVisibility(View.VISIBLE);
 
         feedbackTitleTextView.setText("EARTHQUAKE PREPAREDNESS FEEDBACK");
-        
+
         if (result.isSurvived()) {
             survivalStatusTextView.setText("✓ SURVIVED");
             survivalStatusTextView.setTextColor(getResources().getColor(R.color.secondary));
@@ -494,15 +532,15 @@ public class ImmersiveScenarioActivity extends AppCompatActivity {
         feedback.append("═══════════════════════════════════\n");
         feedback.append("SCORE BREAKDOWN (100 POINTS)\n");
         feedback.append("═══════════════════════════════════\n\n");
-        
+
         if (result.getScoreBreakdown() != null) {
-            int situationScore = (int) result.getScoreBreakdown().get("situationScore");
-            int suppliesScore = (int) result.getScoreBreakdown().get("suppliesScore");
-            int evacuationScore = (int) result.getScoreBreakdown().get("evacuationScore");
-            int adaptabilityScore = (int) result.getScoreBreakdown().get("adaptabilityScore");
-            int preparednessScore = (int) result.getScoreBreakdown().get("preparednessScore");
-            int totalScore = (int) result.getScoreBreakdown().get("totalScore");
-            
+            int situationScore = getIntFromMap(result.getScoreBreakdown(), "situationScore");
+            int suppliesScore = getIntFromMap(result.getScoreBreakdown(), "suppliesScore");
+            int evacuationScore = getIntFromMap(result.getScoreBreakdown(), "evacuationScore");
+            int adaptabilityScore = getIntFromMap(result.getScoreBreakdown(), "adaptabilityScore");
+            int preparednessScore = getIntFromMap(result.getScoreBreakdown(), "preparednessScore");
+            int totalScore = getIntFromMap(result.getScoreBreakdown(), "totalScore");
+
             feedback.append("📊 Situation Evaluation: ").append(situationScore).append("/20\n");
             feedback.append("🎒 Supply Selection: ").append(suppliesScore).append("/20\n");
             feedback.append("🚶 Evacuation Actions: ").append(evacuationScore).append("/25\n");
@@ -511,39 +549,32 @@ public class ImmersiveScenarioActivity extends AppCompatActivity {
             feedback.append("─────────────────────────────\n");
             feedback.append("TOTAL SCORE: ").append(totalScore).append("/100\n\n");
         }
-        
+
         feedback.append("═══════════════════════════════════\n");
         feedback.append("DECISION ANALYSIS\n");
         feedback.append("═══════════════════════════════════\n\n");
-        
-        // Show decision feedback
+
         Map<String, String> decisions = result.getDecisions();
         if (decisions != null) {
-            // Situation evaluation
-            String situationDecision = decisions.get(ScenarioPhase.SITUATION_EVALUATION.name());
             String situationExplanation = decisions.get(ScenarioPhase.SITUATION_EVALUATION.name() + "_explanation");
             if (situationExplanation != null) {
                 feedback.append("🏠 SITUATION EVALUATION:\n");
                 feedback.append(situationExplanation).append("\n\n");
             }
-            
-            // Evacuation
-            String evacuationDecision = decisions.get(ScenarioPhase.EVACUATION_ACTIONS.name());
+
             String evacuationExplanation = decisions.get(ScenarioPhase.EVACUATION_ACTIONS.name() + "_explanation");
             if (evacuationExplanation != null) {
                 feedback.append("🚶 EVACUATION ACTIONS:\n");
                 feedback.append(evacuationExplanation).append("\n\n");
             }
-            
-            // Adaptability
-            String conditionDecision = decisions.get(ScenarioPhase.CHANGING_CONDITIONS.name());
+
             String conditionExplanation = decisions.get(ScenarioPhase.CHANGING_CONDITIONS.name() + "_explanation");
             if (conditionExplanation != null) {
                 feedback.append("🔄 ADAPTABILITY TO CONDITIONS:\n");
                 feedback.append(conditionExplanation).append("\n\n");
             }
         }
-        
+
         feedback.append("═══════════════════════════════════\n");
         feedback.append("PRACTICAL PREPAREDNESS TIPS\n");
         feedback.append("═══════════════════════════════════\n\n");
@@ -555,20 +586,54 @@ public class ImmersiveScenarioActivity extends AppCompatActivity {
         feedback.append("✓ Stay away from windows, glass, and heavy objects\n");
         feedback.append("✓ Never use elevators during/after earthquakes\n");
         feedback.append("✓ Move to open areas away from buildings after shaking\n");
-        
+
         feedbackDescriptionTextView.setText(feedback.toString());
-        
+
         StringBuilder rewards = new StringBuilder();
         rewards.append("Final Health: ").append(result.getFinalHealth()).append("/100\n");
         rewards.append("Time Remaining: ").append(result.getFinalTimeRemaining()).append(" seconds\n\n");
         rewards.append("REWARDS EARNED:\n");
         rewards.append("+").append(result.getXpEarned()).append(" XP\n");
-        rewards.append("+").append(result.getCoinsEarned()).append(" Coins");
+        rewards.append("+").append(result.getCoinsEarned()).append(" Coins\n\n");
+
+        if (currentUserId != null) {
+            loadPreviousAttempts(rewards);
+        }
+
         rewardsTextView.setText(rewards.toString());
 
         returnToDashboardButton.setOnClickListener(v -> {
             returnToDashboard();
         });
+    }
+
+    private void loadPreviousAttempts(StringBuilder rewards) {
+        scenarioAttemptRepository.getScenarioAttempts(currentUserId, scenario.getId(),
+                new ScenarioAttemptRepository.LoadCallback() {
+                    @Override
+                    public void onSuccess(List<ScenarioAttempt> attempts) {
+                        if (attempts != null && !attempts.isEmpty()) {
+                            rewards.append("═══════════════════════════════════\n");
+                            rewards.append("PREVIOUS ATTEMPTS\n");
+                            rewards.append("═══════════════════════════════════\n");
+                            rewards.append("Total attempts: ").append(attempts.size()).append("\n\n");
+
+                            ScenarioAttempt bestAttempt = attempts.get(0);
+                            for (ScenarioAttempt attempt : attempts) {
+                                if (attempt.getTotalScore() > bestAttempt.getTotalScore()) {
+                                    bestAttempt = attempt;
+                                }
+                            }
+
+                            rewards.append("Best Score: ").append(bestAttempt.getTotalScore()).append("/100\n");
+                            rewards.append("Attempt #").append(bestAttempt.getAttemptNumber()).append("\n");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                    }
+                });
     }
 
     /**
@@ -673,6 +738,222 @@ public class ImmersiveScenarioActivity extends AppCompatActivity {
 
     private void returnToDashboard() {
         finish();
+    }
+
+    private void loadLottieAnimation(LottieAnimationView animationView, String animationUrl) {
+        if (animationView == null || animationUrl == null || animationUrl.isEmpty()) {
+            return;
+        }
+        try {
+            if (animationUrl.startsWith("http://") || animationUrl.startsWith("https://")) {
+                animationView.setAnimationFromUrl(animationUrl);
+            } else {
+                animationView.setAnimation(animationUrl);
+            }
+            animationView.playAnimation();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private int getIntFromMap(Map<String, Object> map, String key) {
+        if (map == null || !map.containsKey(key) || map.get(key) == null) {
+            return 0;
+        }
+        Object val = map.get(key);
+        if (val instanceof Number) {
+            return ((Number) val).intValue();
+        }
+        return 0;
+    }
+
+    private void saveScenarioAttempt(ScenarioEngine.ScenarioResult result) {
+        if (currentUserId == null) {
+            Toast.makeText(this, "User not logged in. Attempt not saved.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        scenarioAttemptRepository.getAttemptCount(currentUserId, scenario.getId(),
+                new ScenarioAttemptRepository.CountCallback() {
+                    @Override
+                    public void onSuccess(int count) {
+                        int attemptNumber = count + 1;
+
+                        List<String> supplyIds = new ArrayList<>();
+                        if (result.getSupplies() != null) {
+                            for (EmergencySupply supply : result.getSupplies()) {
+                                supplyIds.add(supply.getId());
+                            }
+                        }
+
+                        ScenarioAttempt attempt = new ScenarioAttempt(
+                                null,
+                                currentUserId,
+                                scenario.getId(),
+                                scenario.getTitle(),
+                                scenario.getType(),
+                                new Date(),
+                                result.isSurvived(),
+                                result.getFinalHealth(),
+                                result.getFinalTimeRemaining(),
+                                result.getXpEarned(),
+                                result.getCoinsEarned(),
+                                result.getTotalScore(),
+                                getIntFromMap(result.getScoreBreakdown(), "situationScore"),
+                                getIntFromMap(result.getScoreBreakdown(), "suppliesScore"),
+                                getIntFromMap(result.getScoreBreakdown(), "evacuationScore"),
+                                getIntFromMap(result.getScoreBreakdown(), "adaptabilityScore"),
+                                getIntFromMap(result.getScoreBreakdown(), "preparednessScore"),
+                                result.getDecisions(),
+                                supplyIds,
+                                attemptNumber,
+                                result.isSurvived()
+                        );
+
+                        scenarioAttemptRepository.saveScenarioAttempt(attempt,
+                                new ScenarioAttemptRepository.SaveCallback() {
+                                    @Override
+                                    public void onSuccess(String documentId) {
+                                        if (result.isSurvived()) {
+                                            updateRewards(result, documentId);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Exception e) {
+                                        String errorMessage = "Failed to save attempt";
+                                        if (e.getMessage() != null) {
+                                            if (e.getMessage().contains("Permission denied")) {
+                                                errorMessage = "Permission denied. Please check your account permissions.";
+                                            } else if (e.getMessage().contains("network")) {
+                                                errorMessage = "Network error. Please check your connection.";
+                                            } else {
+                                                errorMessage = "Failed to save attempt: " + e.getMessage();
+                                            }
+                                        }
+                                        Toast.makeText(ImmersiveScenarioActivity.this,
+                                                errorMessage,
+                                                Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        String errorMessage = "Failed to get attempt count";
+                        if (e.getMessage() != null) {
+                            if (e.getMessage().contains("Permission denied")) {
+                                errorMessage = "Permission denied. Please check your account permissions.";
+                            } else if (e.getMessage().contains("network")) {
+                                errorMessage = "Network error. Please check your connection.";
+                            } else {
+                                errorMessage = "Failed to get attempt count: " + e.getMessage();
+                            }
+                        }
+                        Toast.makeText(ImmersiveScenarioActivity.this,
+                                errorMessage,
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
+    private void updateRewards(ScenarioEngine.ScenarioResult result, String attemptId) {
+        if (currentUserId == null) {
+            return;
+        }
+
+        if (result.isSurvived()) {
+            userRepository.updateXP(currentUserId, result.getXpEarned(),
+                    new UserRepositoryImpl.UserDataCallback() {
+                        @Override
+                        public void onSuccess(android.bignerdranch.learn2survive.domain.model.User user) {
+                            checkAndAwardAchievements(result, user);
+                        }
+
+                        @Override
+                        public void onFailure(String errorMessage) {
+                            Toast.makeText(ImmersiveScenarioActivity.this,
+                                    "Failed to update XP: " + errorMessage,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+            userRepository.updateCoins(currentUserId, result.getCoinsEarned(),
+                    new UserRepositoryImpl.UserDataCallback() {
+                        @Override
+                        public void onSuccess(android.bignerdranch.learn2survive.domain.model.User user) {
+                            userRepository.incrementScenarios(currentUserId,
+                                    new UserRepositoryImpl.UserDataCallback() {
+                                        @Override
+                                        public void onSuccess(android.bignerdranch.learn2survive.domain.model.User user) {
+                                            scenarioAttemptRepository.markRewardClaimed(attemptId,
+                                                    new ScenarioAttemptRepository.SaveCallback() {
+                                                        @Override
+                                                        public void onSuccess(String documentId) {
+                                                        }
+
+                                                        @Override
+                                                        public void onFailure(Exception e) {
+                                                        }
+                                                    });
+                                        }
+
+                                        @Override
+                                        public void onFailure(String errorMessage) {
+                                            Toast.makeText(ImmersiveScenarioActivity.this,
+                                                    "Failed to update scenario count: " + errorMessage,
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        }
+
+                        @Override
+                        public void onFailure(String errorMessage) {
+                            Toast.makeText(ImmersiveScenarioActivity.this,
+                                    "Failed to update coins: " + errorMessage,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+    }
+
+    private void checkAndAwardAchievements(ScenarioEngine.ScenarioResult result, android.bignerdranch.learn2survive.domain.model.User user) {
+        List<String> achievementsToAward = new ArrayList<>();
+
+        if (user.getAchievements() == null) {
+            user.setAchievements(new ArrayList<>());
+        }
+
+        if (result.getTotalScore() >= 90 && !user.getAchievements().contains("first_perfect_scenario")) {
+            achievementsToAward.add("first_perfect_scenario");
+        }
+
+        if (result.isSurvived() && !user.getAchievements().contains("first_survival")) {
+            achievementsToAward.add("first_survival");
+        }
+
+        if (result.getTotalScore() >= 80 && !user.getAchievements().contains("scenario_master")) {
+            achievementsToAward.add("scenario_master");
+        }
+
+        for (String achievementId : achievementsToAward) {
+            userRepository.addAchievement(currentUserId, achievementId,
+                    new UserRepositoryImpl.UserDataCallback() {
+                        @Override
+                        public void onSuccess(android.bignerdranch.learn2survive.domain.model.User user) {
+                            Toast.makeText(ImmersiveScenarioActivity.this,
+                                    "Achievement unlocked: " + achievementId,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onFailure(String errorMessage) {
+                            Toast.makeText(ImmersiveScenarioActivity.this,
+                                    "Failed to award achievement: " + errorMessage,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
     }
 
     @Override
