@@ -21,6 +21,7 @@ import com.airbnb.lottie.LottieAnimationView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import android.bignerdranch.learn2survive.R;
 import android.bignerdranch.learn2survive.data.repository.ScenarioRepository;
@@ -298,6 +299,38 @@ public class ImmersiveScenarioActivity extends AppCompatActivity {
                 showFeedbackScreen();
                 break;
         }
+        
+        // Add fade-in animation for the new screen
+        animateScreenIn();
+    }
+
+    /**
+     * Add fade-in animation for the current screen
+     */
+    private void animateScreenIn() {
+        android.view.View currentScreen = getCurrentVisibleScreen();
+        if (currentScreen != null) {
+            currentScreen.setAlpha(0f);
+            currentScreen.animate()
+                    .alpha(1f)
+                    .setDuration(300)
+                    .setInterpolator(new android.view.animation.DecelerateInterpolator())
+                    .start();
+        }
+    }
+
+    /**
+     * Get the currently visible screen
+     */
+    private android.view.View getCurrentVisibleScreen() {
+        if (warningScreen.getVisibility() == View.VISIBLE) return warningScreen;
+        if (situationScreen.getVisibility() == View.VISIBLE) return situationScreen;
+        if (suppliesScreen.getVisibility() == View.VISIBLE) return suppliesScreen;
+        if (evacuationScreen.getVisibility() == View.VISIBLE) return evacuationScreen;
+        if (conditionsScreen.getVisibility() == View.VISIBLE) return conditionsScreen;
+        if (consequencesScreen.getVisibility() == View.VISIBLE) return consequencesScreen;
+        if (feedbackScreen.getVisibility() == View.VISIBLE) return feedbackScreen;
+        return null;
     }
 
     private void showWarningScreen(ScenarioStep step) {
@@ -447,25 +480,91 @@ public class ImmersiveScenarioActivity extends AppCompatActivity {
         hideAllScreens();
         feedbackScreen.setVisibility(View.VISIBLE);
 
-        feedbackTitleTextView.setText("Scenario Complete");
+        feedbackTitleTextView.setText("EARTHQUAKE PREPAREDNESS FEEDBACK");
         
         if (result.isSurvived()) {
-            survivalStatusTextView.setText("SURVIVED");
+            survivalStatusTextView.setText("✓ SURVIVED");
             survivalStatusTextView.setTextColor(getResources().getColor(R.color.secondary));
         } else {
-            survivalStatusTextView.setText("DID NOT SURVIVE");
+            survivalStatusTextView.setText("✗ DID NOT SURVIVE");
             survivalStatusTextView.setTextColor(getResources().getColor(R.color.danger));
         }
 
         StringBuilder feedback = new StringBuilder();
-        feedback.append("Final Health: ").append(result.getFinalHealth()).append("/100\n");
-        feedback.append("Time Remaining: ").append(result.getFinalTimeRemaining()).append(" seconds\n\n");
-        feedback.append("Rewards:\n");
-        feedback.append("+").append(result.getXpEarned()).append(" XP\n");
-        feedback.append("+").append(result.getCoinsEarned()).append(" Coins");
+        feedback.append("═══════════════════════════════════\n");
+        feedback.append("SCORE BREAKDOWN (100 POINTS)\n");
+        feedback.append("═══════════════════════════════════\n\n");
+        
+        if (result.getScoreBreakdown() != null) {
+            int situationScore = (int) result.getScoreBreakdown().get("situationScore");
+            int suppliesScore = (int) result.getScoreBreakdown().get("suppliesScore");
+            int evacuationScore = (int) result.getScoreBreakdown().get("evacuationScore");
+            int adaptabilityScore = (int) result.getScoreBreakdown().get("adaptabilityScore");
+            int preparednessScore = (int) result.getScoreBreakdown().get("preparednessScore");
+            int totalScore = (int) result.getScoreBreakdown().get("totalScore");
+            
+            feedback.append("📊 Situation Evaluation: ").append(situationScore).append("/20\n");
+            feedback.append("🎒 Supply Selection: ").append(suppliesScore).append("/20\n");
+            feedback.append("🚶 Evacuation Actions: ").append(evacuationScore).append("/25\n");
+            feedback.append("🔄 Adaptability: ").append(adaptabilityScore).append("/25\n");
+            feedback.append("📋 Preparedness: ").append(preparednessScore).append("/10\n");
+            feedback.append("─────────────────────────────\n");
+            feedback.append("TOTAL SCORE: ").append(totalScore).append("/100\n\n");
+        }
+        
+        feedback.append("═══════════════════════════════════\n");
+        feedback.append("DECISION ANALYSIS\n");
+        feedback.append("═══════════════════════════════════\n\n");
+        
+        // Show decision feedback
+        Map<String, String> decisions = result.getDecisions();
+        if (decisions != null) {
+            // Situation evaluation
+            String situationDecision = decisions.get(ScenarioPhase.SITUATION_EVALUATION.name());
+            String situationExplanation = decisions.get(ScenarioPhase.SITUATION_EVALUATION.name() + "_explanation");
+            if (situationExplanation != null) {
+                feedback.append("🏠 SITUATION EVALUATION:\n");
+                feedback.append(situationExplanation).append("\n\n");
+            }
+            
+            // Evacuation
+            String evacuationDecision = decisions.get(ScenarioPhase.EVACUATION_ACTIONS.name());
+            String evacuationExplanation = decisions.get(ScenarioPhase.EVACUATION_ACTIONS.name() + "_explanation");
+            if (evacuationExplanation != null) {
+                feedback.append("🚶 EVACUATION ACTIONS:\n");
+                feedback.append(evacuationExplanation).append("\n\n");
+            }
+            
+            // Adaptability
+            String conditionDecision = decisions.get(ScenarioPhase.CHANGING_CONDITIONS.name());
+            String conditionExplanation = decisions.get(ScenarioPhase.CHANGING_CONDITIONS.name() + "_explanation");
+            if (conditionExplanation != null) {
+                feedback.append("🔄 ADAPTABILITY TO CONDITIONS:\n");
+                feedback.append(conditionExplanation).append("\n\n");
+            }
+        }
+        
+        feedback.append("═══════════════════════════════════\n");
+        feedback.append("PRACTICAL PREPAREDNESS TIPS\n");
+        feedback.append("═══════════════════════════════════\n\n");
+        feedback.append("✓ Practice DROP, COVER, and HOLD ON regularly\n");
+        feedback.append("✓ Secure heavy furniture to walls\n");
+        feedback.append("✓ Create and maintain an emergency supply kit\n");
+        feedback.append("✓ Identify safe spots in each room of your home\n");
+        feedback.append("✓ Know your evacuation routes and meeting points\n");
+        feedback.append("✓ Stay away from windows, glass, and heavy objects\n");
+        feedback.append("✓ Never use elevators during/after earthquakes\n");
+        feedback.append("✓ Move to open areas away from buildings after shaking\n");
         
         feedbackDescriptionTextView.setText(feedback.toString());
-        rewardsTextView.setText("");
+        
+        StringBuilder rewards = new StringBuilder();
+        rewards.append("Final Health: ").append(result.getFinalHealth()).append("/100\n");
+        rewards.append("Time Remaining: ").append(result.getFinalTimeRemaining()).append(" seconds\n\n");
+        rewards.append("REWARDS EARNED:\n");
+        rewards.append("+").append(result.getXpEarned()).append(" XP\n");
+        rewards.append("+").append(result.getCoinsEarned()).append(" Coins");
+        rewardsTextView.setText(rewards.toString());
 
         returnToDashboardButton.setOnClickListener(v -> {
             returnToDashboard();
@@ -482,12 +581,30 @@ public class ImmersiveScenarioActivity extends AppCompatActivity {
                 buttons[i].setText(choice.getText());
                 buttons[i].setVisibility(View.VISIBLE);
                 buttons[i].setOnClickListener(v -> {
-                    scenarioEngine.selectChoice(choice.getId());
+                    // Show feedback before proceeding
+                    showChoiceFeedback(choice);
                 });
             } else {
                 buttons[i].setVisibility(View.GONE);
             }
         }
+    }
+
+    /**
+     * Show feedback for a choice selection
+     */
+    private void showChoiceFeedback(ScenarioStepChoice choice) {
+        boolean isCorrect = choice.isCorrect();
+        String explanation = choice.getExplanation();
+        
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle(isCorrect ? "✓ Good Decision!" : "✗ Poor Decision");
+        builder.setMessage(explanation);
+        builder.setPositiveButton("Continue", (dialog, which) -> {
+            scenarioEngine.selectChoice(choice.getId());
+        });
+        builder.setCancelable(false);
+        builder.show();
     }
 
     private void updateConfirmButton() {

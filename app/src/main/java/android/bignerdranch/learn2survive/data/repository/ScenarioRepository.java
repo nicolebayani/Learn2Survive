@@ -72,9 +72,9 @@ public class ScenarioRepository {
         ImmersiveScenario scenario = new ImmersiveScenario();
         scenario.setId("earthquake_first_60_seconds");
         scenario.setType(DisasterSimulationType.EARTHQUAKE);
-        scenario.setTitle("The First 60 Seconds");
-        scenario.setDescription("Experience the critical first minute of an earthquake and learn the correct survival actions.");
-        scenario.setWarningMessage("A strong earthquake has started in your area. DROP, COVER, and HOLD ON!");
+        scenario.setTitle("EARTHQUAKE: THE FIRST 60 SECONDS");
+        scenario.setDescription("Experience the critical first minute of an earthquake and learn the correct survival actions to stay safe.");
+        scenario.setWarningMessage("⚠️ EARTHQUAKE WARNING: A strong earthquake has started in your area. DROP, COVER, and HOLD ON!");
         scenario.setWarningAnimationUrl("earthquake_warning.json");
         scenario.setWarningSoundUrl("earthquake_alert.mp3");
         scenario.setImageUrl("https://example.com/earthquake_scene.jpg");
@@ -117,19 +117,19 @@ public class ScenarioRepository {
     }
 
     private void createEarthquakeSteps(ImmersiveScenario scenario) {
-        // Step 1: Warning
+        // Step 1: DISASTER WARNING
         ScenarioStep warningStep = new ScenarioStep();
         warningStep.setId("step_warning");
         warningStep.setPhase(ScenarioPhase.WARNING);
-        warningStep.setTitle("EARTHQUAKE WARNING");
-        warningStep.setDescription("The ground begins to shake violently. Books fall from shelves, furniture slides across the floor, and you can hear glass breaking nearby.");
+        warningStep.setTitle("⚠️ EARTHQUAKE WARNING");
+        warningStep.setDescription("LOCATION: You are in your home office on the second floor of a 3-story residential building.\n\nSITUATION: The ground suddenly begins to shake violently. Books fall from shelves, furniture slides across the floor, and you can hear glass breaking nearby. The shaking is rapidly intensifying.\n\nSAFETY NOTE: During an earthquake, the first 60 seconds are critical. Your immediate action determines your safety.");
         warningStep.setAnimationUrl("earthquake_shaking.json");
         warningStep.setSoundUrl("earthquake_rumble.mp3");
-        warningStep.setTimeLimitSeconds(5);
+        warningStep.setTimeLimitSeconds(8);
         
         ScenarioStepChoice startChoice = new ScenarioStepChoice();
         startChoice.setId("choice_start");
-        startChoice.setText("I understand the situation");
+        startChoice.setText("I'm ready to start");
         startChoice.setCorrect(true);
         startChoice.setNextStepId("step_situation");
         warningStep.addChoice(startChoice);
@@ -137,38 +137,38 @@ public class ScenarioRepository {
         scenario.addStep(warningStep);
         scenario.setFirstStepId("step_warning");
 
-        // Step 2: Situation Evaluation
+        // Step 2: EVALUATE THE SITUATION
         ScenarioStep situationStep = new ScenarioStep();
         situationStep.setId("step_situation");
         situationStep.setPhase(ScenarioPhase.SITUATION_EVALUATION);
-        situationStep.setTitle("What should you do?");
-        situationStep.setDescription("The shaking is intensifying. You have seconds to react. A heavy cabinet is teetering above you, and the exit door is to your left.");
+        situationStep.setTitle("What should you do NOW?");
+        situationStep.setDescription("HAZARDS IDENTIFIED:\n• Heavy cabinet teetering directly above you\n• Floor is buckling, creating trip hazards\n• Picture frames falling from walls\n• Ceiling tiles beginning to crack\n• Exit door is 15 feet to your left\n• Large sturdy desk is 5 feet in front of you\n\nTIME: You have less than 10 seconds before the shaking intensifies further.\n\nQUESTION: What is your immediate protective action?");
         
         ScenarioStepChoice choice1 = new ScenarioStepChoice();
         choice1.setId("choice_drop_cover");
-        choice1.setText("DROP, COVER, and HOLD ON under sturdy furniture");
-        choice1.setDescription("Get under a sturdy table or desk and hold on");
+        choice1.setText("DROP, COVER, and HOLD ON under the sturdy desk");
+        choice1.setDescription("Get under the desk immediately, cover your head and neck, hold on firmly");
         choice1.setCorrect(true);
-        choice1.setExplanation("Correct! DROP, COVER, and HOLD ON protects you from falling objects and debris.");
+        choice1.setExplanation("✓ CORRECT! DROP, COVER, and HOLD ON is the standard earthquake safety procedure. This protects you from falling objects and debris. The desk provides overhead protection.");
         choice1.setHealthImpact(0);
         choice1.setNextStepId("step_supplies");
         
         ScenarioStepChoice choice2 = new ScenarioStepChoice();
         choice2.setId("choice_run_outside");
-        choice2.setText("RUN outside immediately");
-        choice2.setDescription("Try to get outside as fast as possible");
+        choice2.setText("RUN outside immediately to get away");
+        choice2.setDescription("Try to get outside as fast as possible through the exit");
         choice2.setCorrect(false);
-        choice2.setExplanation("Incorrect! Running during shaking is dangerous due to falling debris.");
-        choice2.setHealthImpact(-30);
+        choice2.setExplanation("✗ INCORRECT! Running during shaking is extremely dangerous. Falling debris, glass, and collapsing structures pose severe injury risks. You cannot move faster than the ground beneath you.");
+        choice2.setHealthImpact(-35);
         choice2.setNextStepId("step_supplies");
         
         ScenarioStepChoice choice3 = new ScenarioStepChoice();
         choice3.setId("choice_grab_bag");
         choice3.setText("GRAB your emergency bag and head for the door");
-        choice3.setDescription("Quickly grab supplies and leave");
+        choice3.setDescription("Quickly grab your emergency supplies and evacuate");
         choice3.setCorrect(false);
-        choice3.setExplanation("Incorrect! Doorways are not safer than other areas. Taking time to grab supplies risks injury.");
-        choice3.setHealthImpact(-20);
+        choice3.setExplanation("✗ INCORRECT! Doorways are not safer than other areas in modern buildings. Taking time to grab supplies when you need immediate protection risks injury from falling objects.");
+        choice3.setHealthImpact(-25);
         choice3.setNextStepId("step_supplies");
         
         situationStep.addChoice(choice1);
@@ -177,15 +177,15 @@ public class ScenarioRepository {
         
         scenario.addStep(situationStep);
 
-        // Step 3: Supplies Selection
+        // Step 3: SELECT EMERGENCY SUPPLIES
         ScenarioStep suppliesStep = new ScenarioStep();
         suppliesStep.setId("step_supplies");
         suppliesStep.setPhase(ScenarioPhase.SUPPLIES_SELECTION);
         suppliesStep.setTitle("Select Emergency Supplies");
-        suppliesStep.setDescription("The shaking has stopped but aftershocks are possible. Quickly select up to 8 items to take with you.");
+        suppliesStep.setDescription("The shaking has stopped but aftershocks are possible. You have a short window to grab supplies before evacuating.\n\nINSTRUCTIONS: Select up to 8 items from the available supplies. Consider weight, importance, and essentiality.\n\nHINT: Some items are essential for survival, some are useful but not critical, and some could actually slow you down or be dangerous.");
         suppliesStep.setRequiresSupplies(true);
         suppliesStep.setMaxSuppliesAllowed(8);
-        suppliesStep.setTimeLimitSeconds(30);
+        suppliesStep.setTimeLimitSeconds(45);
         
         // No choices for supplies step - handled by selectSupplies method
         // After supplies are selected, advance to evacuation
@@ -193,38 +193,38 @@ public class ScenarioRepository {
         
         scenario.addStep(suppliesStep);
 
-        // Step 4: Evacuation Actions
+        // Step 4: CHOOSE EVACUATION ACTIONS
         ScenarioStep evacuationStep = new ScenarioStep();
         evacuationStep.setId("step_evacuation");
         evacuationStep.setPhase(ScenarioPhase.EVACUATION_ACTIONS);
         evacuationStep.setTitle("Evacuation Decision");
-        evacuationStep.setDescription("The building structure may be compromised. You can see cracks in the walls and debris blocking some paths. The stairs are to your left, elevator to your right.");
+        evacuationStep.setDescription("BUILDING ASSESSMENT:\n• Visible cracks in load-bearing walls\n• Some ceiling tiles collapsed\n• Light fixtures swinging dangerously\n• Stairs to your left appear usable but have debris\n• Elevator to your right (not recommended during/after earthquakes)\n• Main exit leads to open area 3 blocks away\n• Windows showing damaged exterior\n\nGOAL: Reach the designated safe zone outside, away from buildings and power lines.\n\nQUESTION: How will you evacuate?");
         
         ScenarioStepChoice evacChoice1 = new ScenarioStepChoice();
         evacChoice1.setId("evac_stairs");
-        evacChoice1.setText("Take the stairs, watching for debris");
-        evacChoice1.setDescription("Use stairs carefully, avoid debris");
+        evacChoice1.setText("Take the stairs carefully, watching for debris");
+        evacChoice1.setDescription("Use stairs, move slowly, avoid falling debris, hold railings");
         evacChoice1.setCorrect(true);
-        evacChoice1.setExplanation("Correct! Elevators are dangerous during and after earthquakes. Use stairs carefully.");
+        evacChoice1.setExplanation("✓ CORRECT! Stairs are the safest evacuation route during and after earthquakes. Elevators can fail or trap you. Moving carefully prevents injury from debris.");
         evacChoice1.setHealthImpact(0);
         evacChoice1.setNextStepId("step_conditions");
         
         ScenarioStepChoice evacChoice2 = new ScenarioStepChoice();
         evacChoice2.setId("evac_elevator");
         evacChoice2.setText("Use the elevator to reach ground floor quickly");
-        evacChoice2.setDescription("Take elevator for speed");
+        evacChoice2.setDescription("Take elevator for speed to ground floor");
         evacChoice2.setCorrect(false);
-        evacChoice2.setExplanation("Incorrect! Elevators can fail or trap you during earthquakes.");
-        evacChoice2.setHealthImpact(-40);
+        evacChoice2.setExplanation("✗ INCORRECT! Elevators are extremely dangerous during and after earthquakes. Power failure can trap you, the shaft can collapse, and doors may not open. Always use stairs.");
+        evacChoice2.setHealthImpact(-45);
         evacChoice2.setNextStepId("step_conditions");
         
         ScenarioStepChoice evacChoice3 = new ScenarioStepChoice();
         evacChoice3.setId("evac_wait");
         evacChoice3.setText("Wait inside until officials confirm it's safe");
-        evacChoice3.setDescription("Stay put and wait");
+        evacChoice3.setDescription("Stay put and wait for emergency responders");
         evacChoice3.setCorrect(false);
-        evacChoice3.setExplanation("Incorrect! After shaking stops, you should evacuate to an open area away from buildings.");
-        evacChoice3.setHealthImpact(-20);
+        evacChoice3.setExplanation("✗ INCORRECT! After shaking stops, you should evacuate to an open area away from buildings. Staying inside risks injury from aftershocks and structural collapse. Move quickly but carefully.");
+        evacChoice3.setHealthImpact(-25);
         evacChoice3.setNextStepId("step_conditions");
         
         evacuationStep.addChoice(evacChoice1);
@@ -233,51 +233,61 @@ public class ScenarioRepository {
         
         scenario.addStep(evacuationStep);
 
-        // Step 5: Changing Conditions
+        // Step 5: FACE CHANGING CONDITIONS
         ScenarioStep conditionsStep = new ScenarioStep();
         conditionsStep.setId("step_conditions");
         conditionsStep.setPhase(ScenarioPhase.CHANGING_CONDITIONS);
-        conditionsStep.setTitle("Aftershock!");
-        conditionsStep.setDescription("A strong aftershock hits! Loose items fall around you. Some pathways are now blocked.");
+        conditionsStep.setTitle("⚠️ AFTERSHOCK WARNING!");
+        conditionsStep.setDescription("CONDITION UPDATE: A strong aftershock is beginning.\n\nNEW HAZARDS:\n• Intense shaking resuming\n• More ceiling debris falling\n• Some evacuation paths now blocked\n• Structural groaning sounds from above\n• Dust cloud limiting visibility\n\nTIME CRITICAL: You must decide how to respond while aftershock continues.\n\nOBJECTIVE: Continue to the safe zone while adapting to changing conditions.");
         conditionsStep.setAnimationUrl("aftershock.json");
         conditionsStep.setSoundUrl("aftershock_sound.mp3");
         
         // Introduce a new condition
         DisasterCondition aftershockCondition = new DisasterCondition();
         aftershockCondition.setId("aftershock");
-        aftershockCondition.setDescription("Strong aftershock causing additional falling debris");
+        aftershockCondition.setDescription("Strong aftershock causing additional falling debris and blocked paths");
         aftershockCondition.setSeverity("HIGH");
         aftershockCondition.setTimeToImpact(0);
-        aftershockCondition.setEffectOnPlayer("Blocked paths, falling debris risk");
-        aftershockCondition.setRecommendedAction("Stay low, protect head, move carefully");
+        aftershockCondition.setEffectOnPlayer("Limited visibility, blocked paths, falling debris risk");
+        aftershockCondition.setRecommendedAction("Stay low, protect head, move carefully to alternate route");
         aftershockCondition.setLifeThreatening(true);
         conditionsStep.addCondition(aftershockCondition);
         
-        ScenarioStepChoice conditionChoice = new ScenarioStepChoice();
-        conditionChoice.setId("condition_continue");
-        conditionChoice.setText("Continue to safety");
-        conditionChoice.setDescription("Move carefully despite aftershock");
-        conditionChoice.setCorrect(true);
-        conditionChoice.setExplanation("You navigate through the aftershock carefully, protecting your head.");
-        conditionChoice.setHealthImpact(-10);
-        conditionChoice.setNextStepId("step_consequences");
+        ScenarioStepChoice conditionChoice1 = new ScenarioStepChoice();
+        conditionChoice1.setId("condition_adapt");
+        conditionChoice1.setText("Stay low, protect head, find alternate route through debris");
+        conditionChoice1.setDescription("Adapt to conditions, protect yourself, find new path");
+        conditionChoice1.setCorrect(true);
+        conditionChoice1.setExplanation("✓ CORRECT! Adapting to changing conditions is essential. Staying low protects from falling debris. Finding alternate routes shows good situational awareness.");
+        conditionChoice1.setHealthImpact(-5);
+        conditionChoice1.setNextStepId("step_consequences");
         
-        conditionsStep.addChoice(conditionChoice);
+        ScenarioStepChoice conditionChoice2 = new ScenarioStepChoice();
+        conditionChoice2.setId("condition_ignore");
+        conditionChoice2.setText("Continue moving quickly, ignore debris");
+        conditionChoice2.setDescription("Push through regardless of conditions");
+        conditionChoice2.setCorrect(false);
+        conditionChoice2.setExplanation("✗ INCORRECT! Ignoring changing conditions increases injury risk. Moving quickly through debris without protection is dangerous. Adaptability is key to survival.");
+        conditionChoice2.setHealthImpact(-20);
+        conditionChoice2.setNextStepId("step_consequences");
+        
+        conditionsStep.addChoice(conditionChoice1);
+        conditionsStep.addChoice(conditionChoice2);
         
         scenario.addStep(conditionsStep);
 
-        // Step 6: Consequences
+        // Step 6: EXPERIENCE CONSEQUENCES
         ScenarioStep consequencesStep = new ScenarioStep();
         consequencesStep.setId("step_consequences");
         consequencesStep.setPhase(ScenarioPhase.CONSEQUENCES);
-        consequencesStep.setTitle("Immediate Consequences");
-        consequencesStep.setDescription("You've reached the designated safe zone. Emergency responders are arriving.");
+        consequencesStep.setTitle("Consequences");
+        consequencesStep.setDescription("You have reached the designated safe zone. Emergency responders are arriving and you can see emergency vehicles approaching.\n\nYour decisions throughout the scenario have determined your physical condition and ability to evacuate successfully.\n\nThe final results will show how well you handled each critical decision point.");
         consequencesStep.setAnimationUrl("safe_zone.json");
         
         ScenarioStepChoice consequenceChoice = new ScenarioStepChoice();
         consequenceChoice.setId("consequence_view_feedback");
-        consequenceChoice.setText("View my performance");
-        consequenceChoice.setDescription("See how you did");
+        consequenceChoice.setText("View my detailed performance");
+        consequenceChoice.setDescription("See complete analysis and scoring");
         consequenceChoice.setCorrect(true);
         consequenceChoice.setNextStepId("step_feedback");
         
@@ -285,12 +295,12 @@ public class ScenarioRepository {
         
         scenario.addStep(consequencesStep);
 
-        // Step 7: Feedback (Terminal)
+        // Step 7: RECEIVE PREPAREDNESS FEEDBACK
         ScenarioStep feedbackStep = new ScenarioStep();
         feedbackStep.setId("step_feedback");
         feedbackStep.setPhase(ScenarioPhase.FEEDBACK);
-        feedbackStep.setTitle("Scenario Complete");
-        feedbackStep.setDescription("Review your decisions and learn from your experience.");
+        feedbackStep.setTitle("Preparedness Feedback");
+        feedbackStep.setDescription("Your complete performance analysis will show what you did well, what could be improved, and practical tips for earthquake preparedness.");
         feedbackStep.setTerminal(true);
         
         scenario.addStep(feedbackStep);

@@ -101,8 +101,11 @@ public class ScenarioEngine {
             }
         }
 
-        // Record the decision
+        // Record the decision with explanation for feedback
         state.addPhaseDecision(currentStep.getPhase().name(), choiceId);
+        if (choice.getExplanation() != null) {
+            state.addPhaseDecision(currentStep.getPhase().name() + "_explanation", choice.getExplanation());
+        }
 
         // Apply immediate effects
         applyChoiceEffects(choice);
@@ -147,6 +150,23 @@ public class ScenarioEngine {
 
         // Evaluate supply selection
         evaluateSupplySelection();
+
+        // Mark supplies step as completed and advance
+        if (currentStep != null && currentStep.getPhase() == ScenarioPhase.SUPPLIES_SELECTION) {
+            scenario.markStepCompleted(currentStep.getId());
+            // Move to next phase
+            ScenarioPhase nextPhase = getNextPhase(currentStep.getPhase());
+            if (nextPhase != null) {
+                ScenarioStep nextStep = findStepByPhase(nextPhase);
+                if (nextStep != null) {
+                    moveToStep(nextStep.getId());
+                } else {
+                    completeScenario();
+                }
+            } else {
+                completeScenario();
+            }
+        }
     }
 
     /**
@@ -338,16 +358,27 @@ public class ScenarioEngine {
         boolean survived = state.getHealthStatus() > 0 && state.getTimeRemaining() > 0;
         state.setSurvived(survived);
 
-        // Calculate rewards
-        int xpEarned = survived ? scenario.getXpReward() : 0;
-        int coinsEarned = survived ? scenario.getCoinReward() : 0;
+        // Calculate 100-point score breakdown
+        int situationScore = calculateSituationScore();
+        int suppliesScore = calculateSuppliesScore();
+        int evacuationScore = calculateEvacuationScore();
+        int adaptabilityScore = calculateAdaptabilityScore();
+        int preparednessScore = calculatePreparednessScore(survived, state.getHealthStatus());
+        
+        int totalScore = situationScore + suppliesScore + evacuationScore + adaptabilityScore + preparednessScore;
 
-        // Bonus for good decisions
-        int correctChoices = countCorrectChoices();
-        int totalChoices = state.getPhaseDecisions().size();
-        if (totalChoices > 0 && (double) correctChoices / totalChoices >= 0.7) {
-            xpEarned = (int) (xpEarned * 1.2); // 20% bonus for good performance
-        }
+        // Calculate rewards based on score
+        int xpEarned = (int) (scenario.getXpReward() * (totalScore / 100.0));
+        int coinsEarned = (int) (scenario.getCoinReward() * (totalScore / 100.0));
+
+        // Build score breakdown map
+        Map<String, Object> scoreBreakdown = new HashMap<>();
+        scoreBreakdown.put("situationScore", situationScore);
+        scoreBreakdown.put("suppliesScore", suppliesScore);
+        scoreBreakdown.put("evacuationScore", evacuationScore);
+        scoreBreakdown.put("adaptabilityScore", adaptabilityScore);
+        scoreBreakdown.put("preparednessScore", preparednessScore);
+        scoreBreakdown.put("totalScore", totalScore);
 
         ScenarioResult result = new ScenarioResult(
                 scenario.getId(),
@@ -357,12 +388,135 @@ public class ScenarioEngine {
                 xpEarned,
                 coinsEarned,
                 state.getPhaseDecisions(),
-                state.getSelectedSupplies()
+                state.getSelectedSupplies(),
+                scoreBreakdown,
+                state
         );
 
         if (listener != null) {
             listener.onScenarioCompleted(result);
         }
+    }
+
+    private int calculateSituationScore() {
+        // 20 points for situation evaluation
+        String decision = state.getPhaseDecisions().get(ScenarioPhase.SITUATION_EVALUATION.name());
+        if ("choice_drop_cover".equals(decision)) {
+            return 20; // Correct immediate action
+        } else if ("choice_run_outside".equals(decision)) {
+            return 5; // Very dangerous
+        } else if ("choice_grab_bag".equals(decision)) {
+            return 8; // Poor prioritization
+        }
+        return 0;
+    }
+
+    private int calculateSuppliesScore() {
+        // 20 points for supply selection
+        if (state.getSelectedSupplies() == null || state.getSelectedSupplies().isEmpty()) {
+            return 0;
+        }
+
+        String suppliesDecision = state.getPhaseDecisions().get("supplies_evaluation");
+        if (suppliesDecision != null) {
+            // Parse the decision string: "essential:X/Y,unnecessary:Z,weight:W"
+            int essentialSelected = 0;
+            int totalEssential = 0;
+            int unnecessarySelected = 0;
+            int totalWeight = 0;
+
+            try {
+                if (suppliesDecision.contains("essential:")) {
+                    String[] parts = suppliesDecision.split(",");
+                    for (String part : parts) {
+                        if (part.startsWith("essential:")) {
+                            String[] values = part.split(":")[1].split("/");
+                            essentialSelected = Integer.parseInt(values[0]);
+                            totalEssential = Integer.parseInt(values[1]);
+                        } else if (part.startsWith("unnecessary:")) {
+                            unnecessarySelected = Integer.parseInt(part.split(":")[1]);
+                        } else if (part.startsWith("weight:")) {
+                            totalWeight = Integer.parseInt(part.split(":")[1]);
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                // If parsing fails, calculate from actual supplies
+                essentialSelected = (int) state.getSelectedSupplies().stream()
+                        .filter(EmergencySupply::isEssential).count();
+                totalEssential = (int) scenario.getAvailableSupplies().stream()
+                        .filter(EmergencySupply::isEssential).count();
+                unnecessarySelected = (int) state.getSelectedSupplies().stream()
+                        .filter(s -> s.getImportance() < 0).count();
+                totalWeight = state.getSelectedSupplies().stream()
+                        .mapToInt(EmergencySupply::getWeight).sum();
+            }
+
+            // Score calculation
+            int score = 0;
+            
+            // Essential items (10 points max)
+            if (totalEssential > 0) {
+                double essentialRatio = (double) essentialSelected / totalEssential;
+                score += (int) (essentialRatio * 10);
+            }
+
+            // Unnecessary items penalty (5 points max penalty)
+            score -= Math.min(5, unnecessarySelected);
+
+            // Weight penalty (5 points max penalty)
+            if (totalWeight > 10) {
+                score -= Math.min(5, (totalWeight - 10) / 2);
+            }
+
+            return Math.max(0, Math.min(20, score));
+        }
+        return 0;
+    }
+
+    private int calculateEvacuationScore() {
+        // 25 points for evacuation decisions
+        String decision = state.getPhaseDecisions().get(ScenarioPhase.EVACUATION_ACTIONS.name());
+        if ("evac_stairs".equals(decision)) {
+            return 25; // Correct evacuation method
+        } else if ("evac_elevator".equals(decision)) {
+            return 0; // Extremely dangerous
+        } else if ("evac_wait".equals(decision)) {
+            return 8; // Poor decision
+        }
+        return 0;
+    }
+
+    private int calculateAdaptabilityScore() {
+        // 25 points for adaptability to changing conditions
+        String decision = state.getPhaseDecisions().get(ScenarioPhase.CHANGING_CONDITIONS.name());
+        if ("condition_adapt".equals(decision)) {
+            return 25; // Good adaptation
+        } else if ("condition_ignore".equals(decision)) {
+            return 5; // Poor adaptation
+        }
+        return 0;
+    }
+
+    private int calculatePreparednessScore(boolean survived, int finalHealth) {
+        // 10 points for final preparedness assessment
+        if (!survived) {
+            return 0;
+        }
+        
+        // Base points for survival
+        int score = 5;
+        
+        // Bonus for high health
+        if (finalHealth >= 80) {
+            score += 5;
+        } else if (finalHealth >= 50) {
+            score += 3;
+        } else if (finalHealth >= 30) {
+            score += 1;
+        }
+        
+        return score;
     }
 
     private int countCorrectChoices() {
@@ -424,10 +578,13 @@ public class ScenarioEngine {
         private int coinsEarned;
         private Map<String, String> decisions;
         private List<EmergencySupply> supplies;
+        private Map<String, Object> scoreBreakdown;
+        private ScenarioState state;
 
         public ScenarioResult(String scenarioId, boolean survived, int finalHealth,
                            int finalTimeRemaining, int xpEarned, int coinsEarned,
-                           Map<String, String> decisions, List<EmergencySupply> supplies) {
+                           Map<String, String> decisions, List<EmergencySupply> supplies,
+                           Map<String, Object> scoreBreakdown, ScenarioState state) {
             this.scenarioId = scenarioId;
             this.survived = survived;
             this.finalHealth = finalHealth;
@@ -436,6 +593,8 @@ public class ScenarioEngine {
             this.coinsEarned = coinsEarned;
             this.decisions = decisions;
             this.supplies = supplies;
+            this.scoreBreakdown = scoreBreakdown;
+            this.state = state;
         }
 
         // Getters
@@ -447,5 +606,14 @@ public class ScenarioEngine {
         public int getCoinsEarned() { return coinsEarned; }
         public Map<String, String> getDecisions() { return decisions; }
         public List<EmergencySupply> getSupplies() { return supplies; }
+        public Map<String, Object> getScoreBreakdown() { return scoreBreakdown; }
+        public ScenarioState getState() { return state; }
+        
+        public int getTotalScore() {
+            if (scoreBreakdown != null && scoreBreakdown.containsKey("totalScore")) {
+                return (int) scoreBreakdown.get("totalScore");
+            }
+            return 0;
+        }
     }
 }
